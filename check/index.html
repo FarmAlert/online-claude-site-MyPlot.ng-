@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CheckMyPlot — Request a Land Risk Report | MyPlot by 7Ai</title>
+<meta name="description" content="Request an AI powered land risk report for any plot in Abuja. We cross check documents, the AGIS and FCDA registries, satellite history, and on the ground reports.">
+<link rel="icon" type="image/svg+xml" href="../assets/logo/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="nav">
+    <a href="../index.html" class="brand">
+      <svg class="brand-icon" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="0" y="0" width="160" height="160" rx="34" fill="#112038" stroke="#A8CDB8" stroke-opacity="0.4" stroke-width="3"/>
+        <polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle cx="120" cy="114" r="30" fill="#A8CDB8" stroke="#112038" stroke-width="6"/>
+        <path d="M107,114 L117,124 L135,101" fill="none" stroke="#112038" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      MyPlot<span class="dot">.</span><span class="brand-tag">BY 7AI</span>
+    </a>
+    <nav class="product-tabs">
+      <a href="../check/index.html" class="active">CheckMyPlot</a>
+      <a href="../sell/index.html">SellMyPlot</a>
+      <a href="../buy/index.html">BuyMyPlot</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" style="padding-bottom:0;">
+  <div class="wrap hero-inner">
+    <a href="../index.html" class="back-link">← All products</a>
+    <span class="eyebrow">CHECKMYPLOT</span>
+    <h1>Know what's really on that plot.</h1>
+    <p class="lede" style="margin-bottom:40px;">We triangulate documents, the AGIS and FCDA registries, satellite and land use history, on the ground checks, and community reports into one plain language risk report.</p>
+  </div>
+</section>
+
+<section class="content-section" style="padding-top:48px;">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>What we check</h2>
+      <p>Every report covers six independent sources, so a mismatch between them is often the most valuable finding.</p>
+    </div>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="num">01 · DOCUMENTS</span>
+        <h4>Document authentication</h4>
+        <p>C of O, Deed of Assignment and Survey Plan checked for alteration or mismatched details.</p>
+      </div>
+      <div class="info-item">
+        <span class="num">02 · REGISTRY</span>
+        <h4>AGIS &amp; FCDA cross check</h4>
+        <p>Ownership status, encumbrances and litigation flags checked against the official registry.</p>
+      </div>
+      <div class="info-item">
+        <span class="num">03 · SATELLITE</span>
+        <h4>Land use history</h4>
+        <p>Imagery over time surfaces flood zones, setbacks and contradictory land use.</p>
+      </div>
+      <div class="info-item">
+        <span class="num">04 · ON THE GROUND</span>
+        <h4>Community verification</h4>
+        <p>Local checks on who is actually occupying or using the land.</p>
+      </div>
+      <div class="info-item">
+        <span class="num">05 · COURTS</span>
+        <h4>Litigation records</h4>
+        <p>Available court filings checked for disputes not yet reflected in the registry.</p>
+      </div>
+      <div class="info-item">
+        <span class="num">06 · REPORTS</span>
+        <h4>Community fraud reports</h4>
+        <p>Verified, anonymized reports from other buyers and agents on this plot or seller.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="form-section">
+  <div class="wrap">
+    <div class="form-card">
+      <h3>Request a plot check</h3>
+      <p>Fill in as much as you can. We will follow up if anything is missing.</p>
+
+      <div class="form-success">Thank you. Your request has been received. We will be in touch within 24 to 48 hours.</div>
+      <div class="form-error">Something went wrong sending your request. Please try again, or reach us directly.</div>
+
+      <!--
+        FORM SETUP FOR ENGINEER:
+        Replace the form action below with a real Formspree endpoint
+        (or equivalent static-form service). Sign up at https://formspree.io,
+        create a form, and paste your endpoint URL in place of
+        "https://formspree.io/f/REPLACE_WITH_CHECK_FORM_ID" below.
+        See README.md for full setup instructions.
+      -->
+      <form action="https://formspree.io/f/REPLACE_WITH_CHECK_FORM_ID" method="POST" data-myplot-form>
+        <input type="hidden" name="form_source" value="CheckMyPlot request">
+
+        <div class="form-row-2">
+          <div class="field">
+            <label for="check-name">Full name</label>
+            <input type="text" id="check-name" name="name" required>
+          </div>
+          <div class="field">
+            <label for="check-phone">Phone (WhatsApp preferred)</label>
+            <input type="tel" id="check-phone" name="phone" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="check-email">Email</label>
+          <input type="email" id="check-email" name="email" required>
+        </div>
+
+        <div class="field">
+          <label>Requesting as</label>
+          <div class="radio-row">
+            <label class="radio-option"><input type="radio" name="requester_type" value="individual" checked> Individual — ₦50,000</label>
+            <label class="radio-option"><input type="radio" name="requester_type" value="corporate"> Corporate — ₦100,000</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="check-location">Plot location <span class="hint">(district, area)</span></label>
+          <input type="text" id="check-location" name="plot_location" placeholder="e.g. Gwarinpa, Abuja" required>
+        </div>
+
+        <div class="field">
+          <label for="check-refs">Plot number, cadastral zone or file number <span class="hint">(if known)</span></label>
+          <input type="text" id="check-refs" name="plot_reference">
+        </div>
+
+        <div class="field">
+          <label for="check-details">Anything else we should know</label>
+          <textarea id="check-details" name="details" placeholder="Seller name, how you found the plot, documents you already have, etc."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary form-submit">Submit request</button>
+        <p class="form-note">We typically respond within 24 to 48 hours. This submits a request only, payment is arranged after we confirm the scope of the check.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-row">
+      <a href="../index.html" class="brand">
+        <svg class="brand-icon" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="0" y="0" width="160" height="160" rx="34" fill="#112038" stroke="#A8CDB8" stroke-opacity="0.4" stroke-width="3"/>
+          <polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+          <circle cx="120" cy="114" r="30" fill="#A8CDB8" stroke="#112038" stroke-width="6"/>
+          <path d="M107,114 L117,124 L135,101" fill="none" stroke="#112038" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        MyPlot<span class="dot">.</span>
+      </a>
+      <div class="footer-links">
+        <a href="../check/index.html">CheckMyPlot</a>
+        <a href="../sell/index.html">SellMyPlot</a>
+        <a href="../buy/index.html">BuyMyPlot</a>
+        <a href="mailto:kayode.femi@7ai.africa">Contact</a>
+      </div>
+      <div class="footer-meta">
+        <span>© 2026 MyPlot · myplot.ng</span>
+        <span class="tag7ai">BY 7AI</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

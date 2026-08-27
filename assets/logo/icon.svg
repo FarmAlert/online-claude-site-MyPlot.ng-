@@ -1,0 +1,11 @@
+<svg width="512" height="512" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>MyPlot by 7Ai icon</title>
+<rect x="0" y="0" width="160" height="160" rx="34" fill="#112038"/>
+<polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="40" cy="50" r="5" fill="#A8CDB8"/>
+<circle cx="108" cy="38" r="5" fill="#A8CDB8"/>
+<circle cx="120" cy="96" r="5" fill="#A8CDB8"/>
+<circle cx="36" cy="108" r="5" fill="#A8CDB8"/>
+<circle cx="120" cy="114" r="28" fill="#A8CDB8" stroke="#112038" stroke-width="5"/>
+<path d="M108,114 L117,123 L134,102" fill="none" stroke="#112038" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

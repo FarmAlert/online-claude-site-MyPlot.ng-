@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BuyMyPlot — Browse Verified Land in Abuja | MyPlot by 7Ai</title>
+<meta name="description" content="Browse checked, admin approved plots by location and category in Abuja. Free to browse. Reserve a plot with a small fee once listings are live.">
+<link rel="icon" type="image/svg+xml" href="../assets/logo/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="nav">
+    <a href="../index.html" class="brand">
+      <svg class="brand-icon" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="0" y="0" width="160" height="160" rx="34" fill="#112038" stroke="#A8CDB8" stroke-opacity="0.4" stroke-width="3"/>
+        <polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle cx="120" cy="114" r="30" fill="#A8CDB8" stroke="#112038" stroke-width="6"/>
+        <path d="M107,114 L117,124 L135,101" fill="none" stroke="#112038" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      MyPlot<span class="dot">.</span><span class="brand-tag">BY 7AI</span>
+    </a>
+    <nav class="product-tabs">
+      <a href="../check/index.html">CheckMyPlot</a>
+      <a href="../sell/index.html">SellMyPlot</a>
+      <a href="../buy/index.html" class="active">BuyMyPlot</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" style="padding-bottom:0;">
+  <div class="wrap hero-inner">
+    <a href="../index.html" class="back-link">← All products</a>
+    <span class="eyebrow">BUYMYPLOT</span>
+    <h1>Browse land that has already been checked.</h1>
+    <p class="lede" style="margin-bottom:40px;">Every listing on BuyMyPlot has passed a CheckMyPlot risk check and been reviewed by an administrator before it goes live. Browsing is free, always.</p>
+  </div>
+</section>
+
+<section class="content-section" style="padding-top:48px;">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>How it will work</h2>
+      <p>Listings are opening in phases as SellMyPlot brings verified plots onto the platform.</p>
+    </div>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="num">01</span>
+        <h4>Browse for free</h4>
+        <p>Filter by location and category across Abuja. No account or payment needed to look.</p>
+      </div>
+      <div class="info-item">
+        <span class="num">02</span>
+        <h4>See the risk status</h4>
+        <p>Every listing visibly shows its CheckMyPlot result, so you know what has already been verified.</p>
+      </div>
+      <div class="info-item">
+        <span class="num">03</span>
+        <h4>Reserve when ready</h4>
+        <p>A small reservation fee locks a plot and unlocks the seller's contact details, credited toward commission on sale.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="form-section">
+  <div class="wrap">
+    <div class="form-card">
+      <h3>Get notified when listings go live</h3>
+      <p>Tell us what you are looking for and we will reach out as matching plots are added.</p>
+
+      <div class="form-success">Thank you. We will let you know as soon as matching plots are live.</div>
+      <div class="form-error">Something went wrong sending your request. Please try again, or reach us directly.</div>
+
+      <!--
+        FORM SETUP FOR ENGINEER:
+        Replace the form action below with your Formspree endpoint for BuyMyPlot.
+        See README.md for full setup instructions.
+      -->
+      <form action="https://formspree.io/f/REPLACE_WITH_BUY_FORM_ID" method="POST" data-myplot-form>
+        <input type="hidden" name="form_source" value="BuyMyPlot notify request">
+
+        <div class="form-row-2">
+          <div class="field">
+            <label for="buy-name">Full name</label>
+            <input type="text" id="buy-name" name="name" required>
+          </div>
+          <div class="field">
+            <label for="buy-phone">Phone (WhatsApp preferred)</label>
+            <input type="tel" id="buy-phone" name="phone" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="buy-email">Email</label>
+          <input type="email" id="buy-email" name="email" required>
+        </div>
+
+        <div class="field">
+          <label for="buy-location">Preferred location or district</label>
+          <input type="text" id="buy-location" name="preferred_location" placeholder="e.g. Guzape, Life Camp, Jahi">
+        </div>
+
+        <div class="field">
+          <label for="buy-budget">Budget range <span class="hint">(optional)</span></label>
+          <input type="text" id="buy-budget" name="budget_range" placeholder="e.g. ₦20,000,000 to ₦40,000,000">
+        </div>
+
+        <div class="field">
+          <label for="buy-details">Anything else we should know</label>
+          <textarea id="buy-details" name="details" placeholder="Plot size, purpose, timeline, etc."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary form-submit">Notify me</button>
+        <p class="form-note">No payment is required to register interest. Browsing BuyMyPlot will always be free.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-row">
+      <a href="../index.html" class="brand">
+        <svg class="brand-icon" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="0" y="0" width="160" height="160" rx="34" fill="#112038" stroke="#A8CDB8" stroke-opacity="0.4" stroke-width="3"/>
+          <polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+          <circle cx="120" cy="114" r="30" fill="#A8CDB8" stroke="#112038" stroke-width="6"/>
+          <path d="M107,114 L117,124 L135,101" fill="none" stroke="#112038" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        MyPlot<span class="dot">.</span>
+      </a>
+      <div class="footer-links">
+        <a href="../check/index.html">CheckMyPlot</a>
+        <a href="../sell/index.html">SellMyPlot</a>
+        <a href="../buy/index.html">BuyMyPlot</a>
+        <a href="mailto:kayode.femi@7ai.africa">Contact</a>
+      </div>
+      <div class="footer-meta">
+        <span>© 2026 MyPlot · myplot.ng</span>
+        <span class="tag7ai">BY 7AI</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

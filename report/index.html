@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report Land — MyPlot by 7Ai</title>
+<meta name="description" content="Report a suspicious plot or agent. Reports are reviewed before they affect any risk score, and your identity is never made public.">
+<link rel="icon" type="image/svg+xml" href="../assets/logo/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="nav">
+    <a href="../index.html" class="brand">
+      <svg class="brand-icon" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="0" y="0" width="160" height="160" rx="34" fill="#112038" stroke="#A8CDB8" stroke-opacity="0.4" stroke-width="3"/>
+        <polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle cx="120" cy="114" r="30" fill="#A8CDB8" stroke="#112038" stroke-width="6"/>
+        <path d="M107,114 L117,124 L135,101" fill="none" stroke="#112038" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      MyPlot<span class="dot">.</span><span class="brand-tag">BY 7AI</span>
+    </a>
+    <nav class="product-tabs">
+      <a href="../check/index.html">CheckMyPlot</a>
+      <a href="../sell/index.html">SellMyPlot</a>
+      <a href="../buy/index.html">BuyMyPlot</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" style="padding-bottom:0;">
+  <div class="wrap hero-inner">
+    <a href="../index.html" class="back-link">← All products</a>
+    <span class="eyebrow">REPORT LAND</span>
+    <h1>Seen a suspicious plot or agent?</h1>
+    <p class="lede" style="margin-bottom:40px;">Reports are reviewed before they affect any risk score, and your identity is never made public. A verified phone number helps us follow up and discourages false reports.</p>
+  </div>
+</section>
+
+<section class="form-section" style="padding-top:48px;">
+  <div class="wrap">
+    <div class="form-card">
+      <h3>Report a plot or agent</h3>
+      <p>Give us as much detail as you can. We review every report before it affects any risk score.</p>
+
+      <div class="form-success">Thank you. Your report has been received and will be reviewed.</div>
+      <div class="form-error">Something went wrong sending your report. Please try again, or reach us directly.</div>
+
+      <!--
+        FORM SETUP FOR ENGINEER:
+        Replace the form action below with your Formspree endpoint for reports.
+        See README.md for full setup instructions.
+      -->
+      <form action="https://formspree.io/f/REPLACE_WITH_REPORT_FORM_ID" method="POST" data-myplot-form>
+        <input type="hidden" name="form_source" value="Land or agent report">
+
+        <div class="form-row-2">
+          <div class="field">
+            <label for="report-name">Your name <span class="hint">(kept private)</span></label>
+            <input type="text" id="report-name" name="name" required>
+          </div>
+          <div class="field">
+            <label for="report-phone">Phone <span class="hint">(kept private, for follow up)</span></label>
+            <input type="tel" id="report-phone" name="phone" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="report-location">Plot location or description</label>
+          <input type="text" id="report-location" name="plot_location" placeholder="District, area, or nearest landmark" required>
+        </div>
+
+        <div class="field">
+          <label for="report-agent">Agent or seller name <span class="hint">(if known)</span></label>
+          <input type="text" id="report-agent" name="agent_name">
+        </div>
+
+        <div class="field">
+          <label for="report-type">What are you reporting</label>
+          <select id="report-type" name="report_type">
+            <option value="duplicate_sale">Suspected duplicate sale</option>
+            <option value="forged_title">Suspected forged title</option>
+            <option value="disputed_claim">Disputed family or ownership claim</option>
+            <option value="suspicious_agent">Suspicious agent behavior</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="report-details">What happened</label>
+          <textarea id="report-details" name="details" placeholder="Describe what you saw or experienced" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-dark form-submit">Submit report</button>
+        <p class="form-note">Your identity is never published. Reports are only made public, in aggregated form, after multiple independent reports or manual review.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-row">
+      <a href="../index.html" class="brand">
+        <svg class="brand-icon" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="0" y="0" width="160" height="160" rx="34" fill="#112038" stroke="#A8CDB8" stroke-opacity="0.4" stroke-width="3"/>
+          <polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+          <circle cx="120" cy="114" r="30" fill="#A8CDB8" stroke="#112038" stroke-width="6"/>
+          <path d="M107,114 L117,124 L135,101" fill="none" stroke="#112038" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        MyPlot<span class="dot">.</span>
+      </a>
+      <div class="footer-links">
+        <a href="../check/index.html">CheckMyPlot</a>
+        <a href="../sell/index.html">SellMyPlot</a>
+        <a href="../buy/index.html">BuyMyPlot</a>
+        <a href="mailto:kayode.femi@7ai.africa">Contact</a>
+      </div>
+      <div class="footer-meta">
+        <span>© 2026 MyPlot · myplot.ng</span>
+        <span class="tag7ai">BY 7AI</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

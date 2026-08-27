@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SellMyPlot — List a Plot or Estate | MyPlot by 7Ai</title>
+<meta name="description" content="List a plot or an entire estate on MyPlot once it has passed a CheckMyPlot risk check, and reach serious buyers on BuyMyPlot.">
+<link rel="icon" type="image/svg+xml" href="../assets/logo/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="nav">
+    <a href="../index.html" class="brand">
+      <svg class="brand-icon" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="0" y="0" width="160" height="160" rx="34" fill="#112038" stroke="#A8CDB8" stroke-opacity="0.4" stroke-width="3"/>
+        <polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle cx="120" cy="114" r="30" fill="#A8CDB8" stroke="#112038" stroke-width="6"/>
+        <path d="M107,114 L117,124 L135,101" fill="none" stroke="#112038" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      MyPlot<span class="dot">.</span><span class="brand-tag">BY 7AI</span>
+    </a>
+    <nav class="product-tabs">
+      <a href="../check/index.html">CheckMyPlot</a>
+      <a href="../sell/index.html" class="active">SellMyPlot</a>
+      <a href="../buy/index.html">BuyMyPlot</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" style="padding-bottom:0;">
+  <div class="wrap hero-inner">
+    <a href="../index.html" class="back-link">← All products</a>
+    <span class="eyebrow">SELLMYPLOT</span>
+    <h1>List a plot, or a whole estate.</h1>
+    <p class="lede" style="margin-bottom:40px;">A CheckMyPlot risk check is required before anything can list, so every plot on BuyMyPlot has already been screened. Submit a single plot, or a developer's estate as one submission.</p>
+  </div>
+</section>
+
+<section class="content-section" style="padding-top:48px;">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>How listing works</h2>
+      <p>Three steps, whether it is one plot or an entire estate.</p>
+    </div>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="num">STEP 1</span>
+        <h4>Submit your details</h4>
+        <p>Plot or estate location, documents, and your contact details, using the form below.</p>
+      </div>
+      <div class="info-item">
+        <span class="num">STEP 2</span>
+        <h4>Pass CheckMyPlot</h4>
+        <p>We run the risk check. A single plot is checked on its own. An estate is checked as one submission covering every plot inside it.</p>
+      </div>
+      <div class="info-item">
+        <span class="num">STEP 3</span>
+        <h4>Pay and go live</h4>
+        <p>₦50,000 per plot, or a flat ₦1,000,000 per estate. Once paid, your listing appears on BuyMyPlot after admin approval.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="form-section">
+  <div class="wrap">
+    <div class="form-card">
+      <h3>Submit a listing</h3>
+      <p>This starts the process. We will confirm the CheckMyPlot risk check before any listing fee is due.</p>
+
+      <div class="form-success">Thank you. Your listing request has been received. We will follow up with next steps for the risk check.</div>
+      <div class="form-error">Something went wrong sending your request. Please try again, or reach us directly.</div>
+
+      <!--
+        FORM SETUP FOR ENGINEER:
+        Replace the form action below with your Formspree endpoint for SellMyPlot.
+        See README.md for full setup instructions.
+      -->
+      <form action="https://formspree.io/f/REPLACE_WITH_SELL_FORM_ID" method="POST" data-myplot-form>
+        <input type="hidden" name="form_source" value="SellMyPlot listing request">
+
+        <div class="form-row-2">
+          <div class="field">
+            <label for="sell-name">Full name</label>
+            <input type="text" id="sell-name" name="name" required>
+          </div>
+          <div class="field">
+            <label for="sell-phone">Phone (WhatsApp preferred)</label>
+            <input type="tel" id="sell-phone" name="phone" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="sell-email">Email</label>
+          <input type="email" id="sell-email" name="email" required>
+        </div>
+
+        <div class="field">
+          <label>Listing type</label>
+          <div class="radio-row">
+            <label class="radio-option"><input type="radio" name="listing_type" value="plot" checked> Single plot — ₦50,000</label>
+            <label class="radio-option"><input type="radio" name="listing_type" value="estate"> Estate — ₦1,000,000 flat</label>
+          </div>
+        </div>
+
+        <div class="field" id="estate-count-field" style="display:none;">
+          <label for="sell-plot-count">Approximate number of plots in the estate</label>
+          <input type="text" id="sell-plot-count" name="estate_plot_count" placeholder="e.g. 40">
+        </div>
+
+        <div class="field">
+          <label for="sell-location">Plot or estate location <span class="hint">(district, area)</span></label>
+          <input type="text" id="sell-location" name="listing_location" placeholder="e.g. Guzape, Abuja" required>
+        </div>
+
+        <div class="field">
+          <label for="sell-refs">Plot number, cadastral zone or file number <span class="hint">(if known)</span></label>
+          <input type="text" id="sell-refs" name="listing_reference">
+        </div>
+
+        <div class="field">
+          <label>Selling as</label>
+          <div class="radio-row">
+            <label class="radio-option"><input type="radio" name="seller_type" value="individual" checked> Individual owner</label>
+            <label class="radio-option"><input type="radio" name="seller_type" value="agent"> Agent</label>
+            <label class="radio-option"><input type="radio" name="seller_type" value="developer"> Developer / corporate</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="sell-details">Anything else we should know</label>
+          <textarea id="sell-details" name="details" placeholder="Documents you have, asking price, timeline, etc."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary form-submit">Submit listing request</button>
+        <p class="form-note">We will confirm your CheckMyPlot risk check before any listing fee is charged.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-row">
+      <a href="../index.html" class="brand">
+        <svg class="brand-icon" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="0" y="0" width="160" height="160" rx="34" fill="#112038" stroke="#A8CDB8" stroke-opacity="0.4" stroke-width="3"/>
+          <polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+          <circle cx="120" cy="114" r="30" fill="#A8CDB8" stroke="#112038" stroke-width="6"/>
+          <path d="M107,114 L117,124 L135,101" fill="none" stroke="#112038" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        MyPlot<span class="dot">.</span>
+      </a>
+      <div class="footer-links">
+        <a href="../check/index.html">CheckMyPlot</a>
+        <a href="../sell/index.html">SellMyPlot</a>
+        <a href="../buy/index.html">BuyMyPlot</a>
+        <a href="mailto:kayode.femi@7ai.africa">Contact</a>
+      </div>
+      <div class="footer-meta">
+        <span>© 2026 MyPlot · myplot.ng</span>
+        <span class="tag7ai">BY 7AI</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
