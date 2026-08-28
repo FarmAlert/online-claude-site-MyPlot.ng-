@@ -266,6 +266,74 @@ section{padding:0;}
 .report-cta h2{font-family:var(--display); font-size:21px; color:var(--ink); font-weight:600;}
 .report-cta p{margin-top:6px; color:var(--ink-faint); font-size:14px;}
 
+/* ---------- PARTNERS (placeholder, prospective) ---------- */
+.partners{padding:56px 0 64px; background:var(--paper); border-top:1px solid var(--line);}
+.partners-head{text-align:center; max-width:560px; margin:0 auto 32px;}
+.partners-head .eyebrow{color:var(--teal-dim);}
+.partners-head h2{
+  font-family:var(--display); font-weight:700; font-size:clamp(22px,2.6vw,28px);
+  color:var(--ink); letter-spacing:-0.015em; margin-top:8px;
+}
+.partners-head p{font-size:14px; color:var(--ink-faint); margin-top:8px;}
+.partner-row{display:grid; grid-template-columns:repeat(2, minmax(220px, 1fr)); gap:20px; max-width:600px; margin:0 auto;}
+.partner-slot{
+  border:1.5px dashed var(--line); border-radius:6px; background:var(--paper-2);
+  padding:32px 20px; text-align:center;
+}
+.partner-slot .slot-mark{
+  width:44px; height:44px; margin:0 auto 14px; border-radius:8px;
+  border:1.5px dashed var(--ink-faint); display:flex; align-items:center; justify-content:center;
+  color:var(--ink-faint); font-family:var(--mono); font-size:11px;
+}
+.partner-slot h4{font-family:var(--body); font-weight:700; font-size:15px; color:var(--ink); margin-bottom:4px;}
+.partner-slot .role{font-size:12.5px; color:var(--ink-faint); margin-bottom:10px;}
+.partner-slot .status-tag{
+  display:inline-block; font-family:var(--mono); font-size:10px; color:var(--teal-dim);
+  border:1px solid rgba(90,138,112,0.35); border-radius:20px; padding:3px 10px; letter-spacing:0.04em;
+}
+
+/* ---------- BUYMYPLOT MARKETPLACE ---------- */
+.marketplace-banner{
+  background:#FBF3E3; border:1px solid #E8D9B5; border-radius:6px;
+  padding:14px 18px; margin-bottom:32px; font-size:13.5px; color:#7A6420;
+  display:flex; align-items:center; gap:10px;
+}
+.marketplace-banner strong{color:#5C4A14;}
+.district-grid{display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; margin-bottom:48px;}
+.district-card{
+  background:var(--navy); border-radius:6px; padding:22px 18px; text-align:center;
+  position:relative; overflow:hidden;
+}
+.district-card svg{width:40px; height:40px; margin:0 auto 12px;}
+.district-card h4{font-family:var(--body); font-weight:700; font-size:14.5px; color:#fff; margin-bottom:4px;}
+.district-card .count{font-family:var(--mono); font-size:11px; color:var(--teal);}
+.sample-listing{
+  background:var(--paper-2); border:1px solid var(--line); border-radius:6px; overflow:hidden; max-width:420px;
+}
+.sample-listing .thumb{
+  height:160px; background:linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+  display:flex; align-items:center; justify-content:center; position:relative;
+}
+.sample-listing .thumb svg{width:64px; height:64px; opacity:0.35;}
+.sample-listing .example-badge{
+  position:absolute; top:10px; left:10px; background:rgba(255,255,255,0.92); color:var(--ink);
+  font-family:var(--mono); font-size:10px; padding:3px 9px; border-radius:20px; letter-spacing:0.04em;
+}
+.sample-listing .body{padding:18px 20px;}
+.sample-listing .top-row{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;}
+.sample-listing h4{font-family:var(--display); font-size:17px; color:var(--ink); font-weight:700;}
+.sample-listing .loc{font-family:var(--mono); font-size:11px; color:var(--ink-faint); margin-top:2px;}
+.sample-listing .risk-badge{
+  font-family:var(--mono); font-size:10px; font-weight:700; color:var(--teal-dim);
+  border:1px solid rgba(90,138,112,0.4); border-radius:20px; padding:4px 10px; white-space:nowrap;
+}
+.sample-listing .price{font-family:var(--mono); font-size:14px; color:var(--ink); margin-top:10px;}
+
+@media (max-width:900px){
+  .partner-row{grid-template-columns:1fr;}
+  .district-grid{grid-template-columns:repeat(2, 1fr);}
+}
+
 /* ---------- FOOTER ---------- */
 footer{background:var(--navy); color:#8695A6; padding:40px 0;}
 .footer-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;}
