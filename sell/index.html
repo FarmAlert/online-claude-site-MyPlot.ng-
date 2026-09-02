@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SellMyPlot — List a Plot or Estate | MyPlot by 7Ai</title>
-<meta name="description" content="List a plot or an entire estate on MyPlot once it has passed a CheckMyPlot risk check, and reach serious buyers on BuyMyPlot.">
+<title>SellMyPlot — Free Listing, Pay Only When It Sells | MyPlot by 7Ai</title>
+<meta name="description" content="List a checked plot or estate on MyPlot for free. A CheckMyPlot risk check is required first. A 10% commission applies only when the plot actually sells.">
 <link rel="icon" type="image/svg+xml" href="../assets/logo/icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,8 +36,8 @@
   <div class="wrap hero-inner">
     <a href="../index.html" class="back-link">← All products</a>
     <span class="eyebrow">SELLMYPLOT</span>
-    <h1>List a plot, or a whole estate.</h1>
-    <p class="lede" style="margin-bottom:40px;">A CheckMyPlot risk check is required before anything can list, so every plot on BuyMyPlot has already been screened. Submit a single plot, or a developer's estate as one submission.</p>
+    <h1>List for free. Pay only when it sells.</h1>
+    <p class="lede" style="margin-bottom:40px;">A CheckMyPlot risk check is required before anything can list, so every plot on BuyMyPlot has already been screened. Once your plot or estate passes, listing itself costs nothing.</p>
   </div>
 </section>
 
@@ -50,18 +50,49 @@
     <div class="info-grid">
       <div class="info-item">
         <span class="num">STEP 1</span>
-        <h4>Submit your details</h4>
-        <p>Plot or estate location, documents, and your contact details, using the form below.</p>
+        <h4>Pass CheckMyPlot first</h4>
+        <p>Every plot must clear CheckMyPlot's Assurance check before anything can be submitted for listing. This is paid upfront by the seller, before a listing ever exists.</p>
       </div>
       <div class="info-item">
         <span class="num">STEP 2</span>
-        <h4>Pass CheckMyPlot</h4>
-        <p>We run the risk check. A single plot is checked on its own. An estate is checked as one submission covering every plot inside it.</p>
+        <h4>List for free</h4>
+        <p>Once your plot or estate has passed, submit your details below. There is no listing fee, whether it is one plot or fifty.</p>
       </div>
       <div class="info-item">
         <span class="num">STEP 3</span>
-        <h4>Pay and go live</h4>
-        <p>₦50,000 per plot, or a flat ₦1,000,000 per estate. Once paid, your listing appears on BuyMyPlot after admin approval.</p>
+        <h4>Pay only when it sells</h4>
+        <p>A 10% commission is due on any completed sale, 5% to MyPlot and 5% to Law Corridor for preparing the legal transfer documents.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content-section" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>What it costs</h2>
+      <p>CheckMyPlot's fee is the only cost to list. Everything else is only owed if your plot actually sells.</p>
+    </div>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="num">BEFORE LISTING</span>
+        <h4>CheckMyPlot Assurance</h4>
+        <p>₦350,000 for the first plot, ₦20,000 for each additional plot in the same estate. See the <a href="../check/index.html">CheckMyPlot page</a> for the full breakdown.</p>
+      </div>
+      <div class="info-item">
+        <span class="num">TO LIST</span>
+        <h4>SellMyPlot listing fee</h4>
+        <p>₦0. Free, for a single plot or a whole estate, once CheckMyPlot is passed.</p>
+      </div>
+      <div class="info-item">
+        <span class="num">ON SALE ONLY</span>
+        <h4>Commission</h4>
+        <p>10% of the sale price, split 5% to MyPlot and 5% to Law Corridor. Nothing is owed unless a sale actually completes.</p>
+      </div>
+      <div class="info-item">
+        <span class="num">NOTE</span>
+        <h4>What counts as a plot</h4>
+        <p>Each individually surveyed sub-parcel on the approved layout plan, the same definition CheckMyPlot uses.</p>
       </div>
     </div>
   </div>
@@ -71,7 +102,7 @@
   <div class="wrap">
     <div class="form-card">
       <h3>Submit a listing</h3>
-      <p>This starts the process. We will confirm the CheckMyPlot risk check before any listing fee is due.</p>
+      <p>This starts the process. Your CheckMyPlot risk check must be confirmed before your listing goes live, listing itself is free.</p>
 
       <div class="form-success">Thank you. Your listing request has been received. We will follow up with next steps for the risk check.</div>
       <div class="form-error">Something went wrong sending your request. Please try again, or reach us directly.</div>
@@ -103,14 +134,15 @@
         <div class="field">
           <label>Listing type</label>
           <div class="radio-row">
-            <label class="radio-option"><input type="radio" name="listing_type" value="plot" checked> Single plot — ₦50,000</label>
-            <label class="radio-option"><input type="radio" name="listing_type" value="estate"> Estate — ₦1,000,000 flat</label>
+            <label class="radio-option"><input type="radio" name="listing_type" value="plot" checked> Single plot</label>
+            <label class="radio-option"><input type="radio" name="listing_type" value="estate"> Estate</label>
           </div>
         </div>
 
         <div class="field" id="estate-count-field" style="display:none;">
-          <label for="sell-plot-count">Approximate number of plots in the estate</label>
+          <label for="sell-plot-count">Number of plots in the estate</label>
           <input type="text" id="sell-plot-count" name="estate_plot_count" placeholder="e.g. 40">
+          <p class="form-note" style="margin-top:8px;">CheckMyPlot pricing applies per plot: ₦350,000 for the first, ₦20,000 for each additional plot. Listing itself stays free.</p>
         </div>
 
         <div class="field">
@@ -138,7 +170,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary form-submit">Submit listing request</button>
-        <p class="form-note">We will confirm your CheckMyPlot risk check before any listing fee is charged.</p>
+        <p class="form-note">CheckMyPlot must be confirmed before your listing goes live. Listing is free, a 10% commission applies only if the plot sells.</p>
       </form>
     </div>
   </div>
