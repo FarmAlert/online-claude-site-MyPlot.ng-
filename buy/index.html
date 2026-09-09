@@ -32,12 +32,31 @@
   </div>
 </header>
 
-<section class="hero" style="padding-bottom:0;">
+<section class="hero" style="padding-bottom:36px;">
   <div class="wrap hero-inner">
     <a href="../index.html" class="back-link">← All products</a>
     <span class="eyebrow">BUYMYPLOT</span>
     <h1>Browse land that has already been checked.</h1>
-    <p class="lede" style="margin-bottom:40px;">Every listing on BuyMyPlot has passed a CheckMyPlot risk check and been reviewed by an administrator before it goes live. Browsing is free, always.</p>
+    <p class="lede" style="margin-bottom:32px;">Every listing on BuyMyPlot has passed a CheckMyPlot risk check and been reviewed by an administrator before it goes live. Browsing is free, always.</p>
+
+    <div class="tier-key tier-key-dark" id="tier-key">
+      <div class="tier-key-item" data-tier="prime">
+        <span class="legend-swatch" style="background:#112038;"></span>
+        <div><div class="tk-name">Tier 1 &middot; Prime</div><div class="tk-range">₦1M – 4.5M / sqm</div></div>
+      </div>
+      <div class="tier-key-item" data-tier="established">
+        <span class="legend-swatch" style="background:#2F4A6B;"></span>
+        <div><div class="tk-name">Tier 2 &middot; Established</div><div class="tk-range">₦500K – 1.5M / sqm</div></div>
+      </div>
+      <div class="tier-key-item" data-tier="growing">
+        <span class="legend-swatch" style="background:#3F7259;"></span>
+        <div><div class="tk-name">Tier 3 &middot; Growing</div><div class="tk-range">₦150K – 600K / sqm</div></div>
+      </div>
+      <div class="tier-key-item" data-tier="affordable">
+        <span class="legend-swatch" style="background:#8FB89E;"></span>
+        <div><div class="tk-name">Tier 4 &middot; Affordable</div><div class="tk-range">₦20K – 250K / sqm</div></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -45,82 +64,193 @@
   <div class="wrap">
     <div class="marketplace-banner">
       <span>&#9432;</span>
-      <span><strong>Example layout.</strong> These districts and listings are illustrative. Real plots appear here as SellMyPlot brings verified listings onto the platform.</span>
+      <span><strong>Real and example listings.</strong> The featured estate below is real and verified. The district explorer and remaining example cards are illustrative until more listings go live.</span>
     </div>
 
-    <div class="section-head">
-      <h2>Browse by district</h2>
-      <p>Once listings are live, every plot shown here will have already passed a CheckMyPlot risk check.</p>
-    </div>
+    <div class="featured-estate" id="featured-estate-container"></div>
 
-    <div class="district-grid">
-      <div class="district-card">
-        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="8,12 30,8 33,28 6,30" fill="none" stroke="#A8CDB8" stroke-width="2" stroke-linejoin="round"/></svg>
-        <h4>Gwarinpa</h4>
-        <div class="count">Example: 12 plots</div>
+<div class="explorer-wrap">
+  <div class="explorer-head">
+    <span class="explorer-eyebrow">EXPLORE ABUJA</span>
+    <h2>Find your district.</h2>
+    <p>Click a price tier above to see its districts.</p>
+  </div>
+
+  <div class="skyline-scroll">
+    <div id="skyline-container" class="pin-row"></div>
+  </div>
+
+  <div id="detail-panel" class="detail-panel"></div>
+  <div id="empty-state" class="empty-state">Select a price tier above to see its districts.</div>
+</div>
+
+<script>
+const TIERS = [
+  { key:'prime', name:'Tier 1 · Prime', range:'₦1M – 4.5M / sqm', pinScale:0.72, colors:['#0A1628','#112038','#1C304E'] },
+  { key:'established', name:'Tier 2 · Established', range:'₦500K – 1.5M / sqm', pinScale:0.62, colors:['#233A56','#2F4A6B','#3D5A7D'] },
+  { key:'growing', name:'Tier 3 · Growing', range:'₦150K – 600K / sqm', pinScale:0.54, colors:['#2C5A40','#3F7259','#4F8A6D'] },
+  { key:'affordable', name:'Tier 4 · Affordable', range:'₦20K – 250K / sqm', pinScale:0.47, colors:['#6FA083','#8FB89E','#A8CDB8'] },
+];
+
+const DISTRICTS = [
+  // TIER 1 - PRIME
+  { name:'Maitama', tier:'prime', price:'₦900M – 2B+', yield:'5 – 7%', desc:"Abuja's most prestigious address. Home to embassies, the Transcorp Hilton, and tree lined streets built around diplomatic life. Villas and serviced apartments dominate, with some of the tightest security in the city.", landmark:'Transcorp Hilton & the diplomatic embassy row', remote:"Maitama's title history is deep and well documented, but exactly the kind of district where an independent registry check matters most, high value plots attract the most sophisticated fraud attempts." },
+  { name:'Asokoro', tier:'prime', price:'₦900M – 2B+', yield:'3 – 5%', desc:'An exclusive government residential district. High end mansions and diplomatic quarters sit behind some of the tightest security in Abuja. Quiet, low traffic, and built for privacy.', landmark:'Presidential Villa & Three Arms Zone proximity', remote:'Asokoro 2 has recorded some of the fastest land appreciation in the city, which is exactly the kind of fast moving market where verifying a title before committing funds matters most.' },
+  { name:'Wuse II', tier:'prime', price:'₦1M – 4.5M/sqm', yield:'2 – 3%', desc:"Abuja's vibrant central hub. Wuse Market, restaurants, banks, and high street retail sit alongside residential towers. A strong choice for mixed use investment and short let income.", landmark:'Wuse Market & the central business corridor', remote:'Central, high turnover districts like Wuse II see land change hands often, which makes an independent, document by document check especially valuable before you buy remotely.' },
+  { name:'Guzape', tier:'prime', price:'₦680M – 1B+', yield:'3 – 4%', desc:'A hilltop premium district and one of the fastest appreciating corridors in Abuja, with some plots reportedly gaining several times their value within a few years as new luxury development moves in.', landmark:'Hilltop views over the Aso Rock corridor', remote:'Guzape 2 land has appreciated dramatically in a short window, which is precisely the environment where fraudulent resale and duplicate titles tend to surface. Verify before you buy.' },
+
+  // TIER 2 - ESTABLISHED
+  { name:'Jabi', tier:'established', price:'₦400M – 680M', yield:'2 – 3%, higher for short let', desc:'Modern apartments built around Jabi Lake Mall. A favourite with expats and corporate transferees for its shopping access, restaurants, and family friendly facilities.', landmark:'Jabi Lake Mall & Jabi Lake', remote:'Jabi\u2019s popularity with diaspora and corporate buyers means listings move fast. A CheckMyPlot report gives you the same confidence a local buyer gets from driving past the plot themselves.' },
+  { name:'Katampe', tier:'established', price:'₦400M – 680M', yield:'5 – 7%', desc:'Katampe and Katampe Extension offer a more affordable route into premium Abuja living, close to Maitama and Wuse without the top tier price tag. Popular with buyers who want a prime feel on a smaller budget.', landmark:'Katampe Extension corridor', remote:'Named among the fastest capital appreciation corridors in Abuja right now, which raises the stakes on getting the title verification right before you commit.' },
+  { name:'Jahi', tier:'established', price:'₦300M – 500M', yield:'5 – 7%', desc:'Upscale living at a step below Maitama and Asokoro prices. One of the fastest growing investor favourites in the city, with strong demand from tenants and buyers alike.', landmark:'Jahi District Park corridor', remote:'Jahi\u2019s fast growth is a double edged sword for remote buyers, real upside, but also more informal resale activity to verify carefully.' },
+  { name:'Life Camp', tier:'established', price:'₦45M – 250M', yield:'5 – 8%', desc:'Family oriented gated estates with schools and amenities close by. Adjacent to Gwarinpa, with a more suburban, residential feel than the central districts.', landmark:'Adjacent to Gwarinpa Expressway', remote:'A strong first choice for diaspora families planning an eventual return, established enough to feel safe, still appreciating enough to make sense as an investment.' },
+
+  // TIER 3 - GROWING
+  { name:'Gwarinpa', tier:'growing', price:'₦45M – 120M', yield:'5 – 8%', desc:'Home to the largest residential estate in West Africa. The best value for money in Abuja if you choose your street carefully, quality varies block by block across this sprawling district.', landmark:'The Gwarinpa Estate grid itself', remote:"Gwarinpa's sheer size is exactly why remote buyers need independent verification, the difference between a paved, secure street and a flooded one can be three blocks apart, and you can't see that from abroad." },
+  { name:'Dawaki', tier:'growing', price:'₦25M – 100M', yield:'7 – 10%', desc:"One of Abuja's top rated 2026 investment hotspots. Massive new development activity and a genuinely affordable entry point compared to its established neighbours.", landmark:'Along the Kubwa Expressway corridor', remote:'Rapid new development means a lot of land changing hands quickly, exactly the environment where a documented risk report protects a buyer who cannot inspect in person.' },
+  { name:'Lokogoma', tier:'growing', price:'₦25M – 90M', yield:'6 – 9%', desc:"Abuja's southern growth corridor. Increasingly popular with buyers priced out of Wuye and Jabi but who still want reasonable proximity to the city centre.", landmark:'Southern expressway access', remote:'A genuine up and coming corridor, worth the same diligence as any fast growing area before committing capital from a distance.' },
+  { name:'Karsana', tier:'growing', price:'₦15M – 60M', yield:'7 – 10%', desc:"Between Gwarinpa and Kubwa, and now the site of the federal government's Renewed Hope affordable housing project. Widely flagged as one of Abuja's highest growth potential corridors for 2026.", landmark:'Renewed Hope Estate development', remote:'Early stage growth corridors carry the most upside and the least paper trail, exactly where CheckMyPlot\u2019s registry and court record checks earn their keep.' },
+
+  // TIER 4 - AFFORDABLE
+  { name:'Lugbe', tier:'affordable', price:'₦15M – 40M', yield:'7 – 10%+', desc:'Close to the airport and one of the most affordable corridors in Abuja, with some of the strongest rental yields in the city. A favourite with first time buyers and land bank investors.', landmark:'Nnamdi Azikiwe International Airport road', remote:'High yield, high turnover districts like Lugbe are also where informal resale and unclear titles show up most often, the exact gap CheckMyPlot is built to close.' },
+  { name:'Kubwa', tier:'affordable', price:'₦15M – 40M', yield:'7 – 10%', desc:'A large, established satellite town with a strong existing community, reliable amenities, and consistently affordable entry prices relative to the city centre.', landmark:'Kubwa town centre & expressway junction', remote:"One of Abuja's most populated satellite towns, meaning plentiful supply, and plentiful reason to verify before you buy sight unseen." },
+  { name:'Jikwoyi', tier:'affordable', price:'₦2.5M – 15M', yield:'8 – 12%', desc:'Along the Nyanya-Karshi corridor, transformed in recent years from a quiet settlement into a major affordable investment zone, with consistent upward price movement as infrastructure expands.', landmark:'Nyanya–Karshi expressway corridor', remote:"Entry level pricing draws first time and diaspora investors alike, which is also exactly the profile fraudulent sellers target. Verify the title, not just the price." },
+  { name:'Kuje', tier:'affordable', price:'₦1M – 2.8M', yield:'8 – 12%', desc:"A satellite city south of Abuja, historically overlooked but now benefiting from real infrastructure investment. One of the most affordable entry points left in the FCT for patient, long term investors.", landmark:'Kuje satellite town centre', remote:'The most affordable corridor on this map, and the one where a buyer physically absent from Nigeria has the least ability to self verify anything. This is where CheckMyPlot matters most.' },
+];
+
+const skylineContainer = document.getElementById('skyline-container');
+
+function findListingsForDistrict(districtName) {
+  if (typeof MYPLOT_LISTINGS === 'undefined') return [];
+  var matches = [];
+  for (var i = 0; i < MYPLOT_LISTINGS.length; i++) {
+    var l = MYPLOT_LISTINGS[i];
+    if (l.district && l.district.toLowerCase() === districtName.toLowerCase()) {
+      matches.push(l);
+    }
+  }
+  return matches;
+}
+
+function renderTierDistricts(tierKey) {
+  skylineContainer.innerHTML = '';
+  const tier = TIERS.filter(t => t.key === tierKey)[0];
+  if (!tier) return;
+
+  DISTRICTS.filter(d => d.tier === tierKey).forEach(d => {
+    const slot = document.createElement('div');
+    slot.className = 'block-slot';
+    slot.dataset.name = d.name;
+
+    const scale = 0.72;
+    const svgW = 100 * scale + 20;
+    const svgH = 130 * scale + 24;
+    const cx = svgW / 2;
+    const topY = 12;
+    const r = 42 * scale;
+    const tipY = topY + r + 92 * scale;
+
+    const listings = findListingsForDistrict(d.name);
+    const forSaleBadge = listings.length > 0 ? `<div class="pin-forsale-badge">FOR SALE</div>` : '';
+
+    slot.innerHTML = `
+      <svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}">
+        <ellipse cx="${cx}" cy="${svgH - 8}" rx="${26 * scale}" ry="${7 * scale}" fill="#112038" opacity="0.12" />
+        <path d="M${cx},${topY} C${cx - r},${topY} ${cx - r},${topY + r * 0.7} ${cx - r},${topY + r} C${cx - r},${topY + r * 1.9} ${cx},${tipY} ${cx},${tipY} Z" fill="${tier.colors[1]}" />
+        <path d="M${cx},${topY} C${cx + r},${topY} ${cx + r},${topY + r * 0.7} ${cx + r},${topY + r} C${cx + r},${topY + r * 1.9} ${cx},${tipY} ${cx},${tipY} L${cx},${topY} Z" fill="${tier.colors[0]}" />
+        <circle cx="${cx}" cy="${topY + r * 0.62}" r="${r * 0.4}" fill="${tier.colors[2]}" />
+      </svg>
+      ${forSaleBadge}
+      <div class="bname">${d.name}</div>
+      <div class="bprice">${d.price}</div>
+    `;
+    slot.addEventListener('click', () => showDetail(d, tier));
+    skylineContainer.appendChild(slot);
+  });
+
+  document.getElementById('empty-state').style.display = 'none';
+  skylineContainer.style.display = 'flex';
+}
+
+const tierCards = document.querySelectorAll('.tier-key-item');
+for (var t = 0; t < tierCards.length; t++) {
+  tierCards[t].addEventListener('click', function() {
+    for (var k = 0; k < tierCards.length; k++) { tierCards[k].classList.remove('tier-active'); }
+    this.classList.add('tier-active');
+    renderTierDistricts(this.dataset.tier);
+    document.getElementById('detail-panel').classList.remove('show');
+  });
+}
+skylineContainer.style.display = 'none';
+
+function showDetail(d, tier) {
+  var slots1 = document.querySelectorAll('.block-slot');
+  for (var i = 0; i < slots1.length; i++) {
+    slots1[i].classList.toggle('active', slots1[i].dataset.name === d.name);
+  }
+  document.getElementById('empty-state').style.display = 'none';
+  const panel = document.getElementById('detail-panel');
+  panel.classList.add('show');
+
+  const districtListings = findListingsForDistrict(d.name);
+  let forSaleHtml = '<div class="for-sale-block"><div class="fs-label">CURRENTLY FOR SALE IN ' + d.name.toUpperCase() + '</div>';
+  if (districtListings.length > 0) {
+    districtListings.forEach(function(l) {
+      var firstUnit = l.units[0];
+      var priceLabel = l.units.length > 1 ? 'From ' + firstUnit.price : firstUnit.price;
+      forSaleHtml += '<a href="#featured-estate-container" class="fs-item">' +
+        '<div><div class="fs-name">' + l.name + '</div><div class="fs-meta">' + (l.founding ? 'Founding Estate &middot; ' : '') + l.verification + '</div></div>' +
+        '<div class="fs-price">' + priceLabel + '</div>' +
+      '</a>';
+    });
+  } else {
+    forSaleHtml += '<div class="fs-empty">No verified listings here yet. Check back as SellMyPlot brings more estates onto the platform.</div>';
+  }
+  forSaleHtml += '</div>';
+
+  panel.innerHTML = `
+    <div class="detail-top">
+      <div>
+        <span class="detail-tier-badge" style="background:${tier.colors[2]}; color:#0A1628;">${tier.name.toUpperCase()}</span>
+        <div class="detail-title">${d.name}</div>
+        <div class="detail-sub">${d.landmark}</div>
       </div>
-      <div class="district-card">
-        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="8,12 30,8 33,28 6,30" fill="none" stroke="#A8CDB8" stroke-width="2" stroke-linejoin="round"/></svg>
-        <h4>Guzape</h4>
-        <div class="count">Example: 6 plots</div>
-      </div>
-      <div class="district-card">
-        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="8,12 30,8 33,28 6,30" fill="none" stroke="#A8CDB8" stroke-width="2" stroke-linejoin="round"/></svg>
-        <h4>Life Camp</h4>
-        <div class="count">Example: 9 plots</div>
-      </div>
-      <div class="district-card">
-        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="8,12 30,8 33,28 6,30" fill="none" stroke="#A8CDB8" stroke-width="2" stroke-linejoin="round"/></svg>
-        <h4>Jahi</h4>
-        <div class="count">Example: 5 plots</div>
-      </div>
-      <div class="district-card">
-        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="8,12 30,8 33,28 6,30" fill="none" stroke="#A8CDB8" stroke-width="2" stroke-linejoin="round"/></svg>
-        <h4>Katampe</h4>
-        <div class="count">Example: 8 plots</div>
-      </div>
-      <div class="district-card">
-        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="8,12 30,8 33,28 6,30" fill="none" stroke="#A8CDB8" stroke-width="2" stroke-linejoin="round"/></svg>
-        <h4>Maitama</h4>
-        <div class="count">Example: 3 plots</div>
-      </div>
-      <div class="district-card">
-        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="8,12 30,8 33,28 6,30" fill="none" stroke="#A8CDB8" stroke-width="2" stroke-linejoin="round"/></svg>
-        <h4>Asokoro</h4>
-        <div class="count">Example: 4 plots</div>
-      </div>
-      <div class="district-card">
-        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="8,12 30,8 33,28 6,30" fill="none" stroke="#A8CDB8" stroke-width="2" stroke-linejoin="round"/></svg>
-        <h4>Wuse</h4>
-        <div class="count">Example: 11 plots</div>
-      </div>
+      <button class="close-btn" onclick="closeDetail()">&times;</button>
     </div>
+    <div class="detail-grid">
+      <div class="detail-stat"><div class="slabel">TYPICAL PRICE RANGE</div><div class="sval">${d.price}</div></div>
+      <div class="detail-stat"><div class="slabel">RENTAL YIELD</div><div class="sval">${d.yield}</div></div>
+    </div>
+    <div class="detail-desc">${d.desc}</div>
+    ${forSaleHtml}
+    <div class="remote-note">
+      <div class="rlabel">IF YOU CAN'T VISIT IN PERSON</div>
+      <p>${d.remote}</p>
+    </div>
+    <div class="detail-cta">
+      <a href="../check/index.html" class="cta-primary">Check a plot in ${d.name} →</a>
+      <a href="#" class="cta-ghost" onclick="closeDetail(); return false;">Keep exploring →</a>
+    </div>
+  `;
+}
+function closeDetail(){
+  document.getElementById('detail-panel').classList.remove('show');
+  document.getElementById('empty-state').style.display = 'block';
+  var slots2 = document.querySelectorAll('.block-slot');
+  for (var j = 0; j < slots2.length; j++) {
+    slots2[j].classList.remove('active');
+  }
+}
+</script>
+
+
 
     <div class="section-head">
       <h2>What a listing will look like</h2>
-      <p>Every plot on BuyMyPlot carries its risk status up front, so you know what has already been checked.</p>
+      <p>Every listing shows its property type and exactly what has been verified, land title checks and building checks are not the same thing, and MyPlot never blurs that line.</p>
     </div>
 
-    <div class="sample-listing">
-      <div class="thumb">
-        <span class="example-badge">EXAMPLE LISTING</span>
-        <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="6" stroke-linejoin="round"/>
-          <circle cx="120" cy="114" r="26" fill="#A8CDB8"/>
-          <path d="M108,114 L117,123 L134,102" fill="none" stroke="#112038" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <div class="body">
-        <div class="top-row">
-          <div>
-            <h4>750 sqm Residential Plot</h4>
-            <div class="loc">GWARINPA, ABUJA</div>
-          </div>
-          <span class="risk-badge">LOW RISK</span>
-        </div>
-        <div class="price">₦35,000,000</div>
-      </div>
-    </div>
+    <div class="listings-row" id="listings-container"></div>
   </div>
 </section>
 
@@ -262,6 +392,126 @@
   </div>
 </footer>
 
+<script src="../assets/listings-data.js"></script>
+<script>
+function renderFeaturedEstate() {
+  var container = document.getElementById('featured-estate-container');
+  if (!container || typeof MYPLOT_LISTINGS === 'undefined') return;
+
+  var featured = null;
+  for (var i = 0; i < MYPLOT_LISTINGS.length; i++) {
+    if (MYPLOT_LISTINGS[i].founding) { featured = MYPLOT_LISTINGS[i]; break; }
+  }
+  if (!featured) { container.style.display = 'none'; return; }
+
+  var unitIcons = [
+    '<svg class="fe-unit-icon" viewBox="0 0 60 60"><rect x="10" y="26" width="40" height="26" rx="2" fill="#2C7A54"/><polygon points="6,26 30,10 54,26" fill="#1F5C3F"/><rect x="26" y="36" width="8" height="16" fill="#fff"/></svg>',
+    '<svg class="fe-unit-icon" viewBox="0 0 60 60"><rect x="8" y="22" width="20" height="30" fill="#2C7A54"/><rect x="30" y="16" width="22" height="36" fill="#1F5C3F"/><rect x="12" y="30" width="6" height="6" fill="#fff"/><rect x="35" y="24" width="6" height="6" fill="#fff"/></svg>',
+    '<svg class="fe-unit-icon" viewBox="0 0 60 60"><rect x="6" y="24" width="16" height="28" fill="#3F9469"/><rect x="24" y="24" width="16" height="28" fill="#2C7A54"/><rect x="42" y="24" width="12" height="28" fill="#1F5C3F"/></svg>'
+  ];
+
+  var unitsHtml = '';
+  for (var j = 0; j < featured.units.length; j++) {
+    var u = featured.units[j];
+    unitsHtml += '<div class="fe-unit">' +
+      (unitIcons[j] || unitIcons[0]) +
+      '<div class="fe-unit-size">' + u.size + '</div>' +
+      '<div class="fe-unit-label">' + u.label + '</div>' +
+      '<div class="fe-price-row">' +
+        (u.wasPrice ? '<span class="fe-promo-tag">Promo Price</span>' : '') +
+        '<span class="fe-price">' + u.price + '</span>' +
+        (u.wasPrice ? '<span class="fe-was-price">' + u.wasPrice + '</span>' : '') +
+      '</div>' +
+    '</div>';
+  }
+
+  container.innerHTML =
+    '<div class="fe-card">' +
+      '<div class="fe-top">' +
+        '<span class="fe-ribbon">&#9733; Founding Estate &middot; Now Selling</span>' +
+        '<div class="fe-verify-anchor">' +
+          '<svg class="fv-icon" viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#3F7259"/><path d="M5.5,10.2 L8.5,13.2 L14.5,6.8" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          '<span class="fv-text">' + featured.verification + '</span>' +
+        '</div>' +
+        '<div class="fe-name">' + featured.name + '</div>' +
+        '<div class="fe-loc">&#128205; ' + featured.location + '</div>' +
+        '<span class="fe-approved">&#9989; FCDA Approved Estate Plot</span>' +
+        '<div class="fe-note">' + featured.imageNote + '</div>' +
+      '</div>' +
+      '<div class="fe-units">' + unitsHtml + '</div>' +
+      '<div class="fe-cta-row">' +
+        '<div class="fe-desc">' + featured.description + '</div>' +
+        '<a href="#" class="btn btn-primary">Enquire about ' + featured.name + ' &rarr;</a>' +
+      '</div>' +
+    '</div>';
+}
+renderFeaturedEstate();
+
+function renderListings() {
+  var container = document.getElementById('listings-container');
+  if (!container || typeof MYPLOT_LISTINGS === 'undefined') return;
+
+  var html = '';
+  for (var i = 0; i < MYPLOT_LISTINGS.length; i++) {
+    var l = MYPLOT_LISTINGS[i];
+    if (l.founding) continue;
+    var isLand = l.propertyType === 'land';
+    var typeClass = isLand ? 'land' : 'building';
+    var typeLabel = isLand ? 'LAND' : 'BUILDING';
+
+    var badgeClass = 'risk-badge';
+    if (l.verification === 'LAND ONLY') badgeClass = 'verify-scope-badge';
+    else if (l.verification === 'MEDIUM RISK') badgeClass = 'risk-badge risk-medium';
+    else if (l.verification === 'HIGH RISK') badgeClass = 'risk-badge risk-high';
+
+    var cornerBadge = '';
+    if (l.founding) {
+      cornerBadge = '<span class="example-badge founding-badge">FOUNDING ESTATE</span>';
+    } else if (l.isExample) {
+      cornerBadge = '<span class="example-badge">EXAMPLE LISTING</span>';
+    }
+
+    var iconSvg = isLand
+      ? '<svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="6" stroke-linejoin="round"/><circle cx="120" cy="114" r="26" fill="#A8CDB8"/><path d="M108,114 L117,123 L134,102" fill="none" stroke="#112038" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : '<svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="34" y="60" width="92" height="70" fill="none" stroke="#A8CDB8" stroke-width="6"/><polygon points="30,60 80,28 130,60" fill="none" stroke="#A8CDB8" stroke-width="6" stroke-linejoin="round"/><rect x="70" y="95" width="20" height="35" fill="none" stroke="#A8CDB8" stroke-width="5"/></svg>';
+
+    var unitsHtml = '';
+    if (l.units.length === 1) {
+      var u = l.units[0];
+      unitsHtml = '<div class="price">' + u.price + (u.wasPrice ? ' <span class="was-price">' + u.wasPrice + '</span>' : '') + '</div>';
+    } else {
+      unitsHtml = '<div class="unit-options">';
+      for (var j = 0; j < l.units.length; j++) {
+        var uu = l.units[j];
+        unitsHtml += '<div class="unit-option">' +
+          '<div class="unit-option-label"><strong>' + uu.size + '</strong> &middot; ' + uu.label + '</div>' +
+          '<div class="unit-option-price">' + uu.price + (uu.wasPrice ? ' <span class="was-price">' + uu.wasPrice + '</span>' : '') + '</div>' +
+        '</div>';
+      }
+      unitsHtml += '</div>';
+    }
+
+    html += '<div class="sample-listing">' +
+      '<div class="thumb">' +
+        cornerBadge +
+        '<span class="type-badge ' + typeClass + '">' + typeLabel + '</span>' +
+        iconSvg +
+      '</div>' +
+      '<div class="body">' +
+        '<div class="top-row">' +
+          '<div><h4>' + l.name + '</h4><div class="loc">' + l.location.toUpperCase() + '</div></div>' +
+          '<span class="' + badgeClass + '">' + l.verification + '</span>' +
+        '</div>' +
+        unitsHtml +
+        (l.imageNote ? '<div class="image-note">' + l.imageNote + '</div>' : '') +
+        '<div class="scope-note">' + l.description + '</div>' +
+      '</div>' +
+    '</div>';
+  }
+  container.innerHTML = html;
+}
+renderListings();
+</script>
 <script src="../js/main.js"></script>
 </body>
 </html>
