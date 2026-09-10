@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Refer & Earn — MyPlot by 7Ai</title>
+<meta name="description" content="Refer a buyer to MyPlot and earn a share of commission when their purchase closes. Free to join, nothing owed unless a sale actually completes.">
+<link rel="icon" type="image/svg+xml" href="../assets/logo/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="nav">
+    <a href="../index.html" class="brand">
+      <svg class="brand-icon" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="0" y="0" width="160" height="160" rx="34" fill="#112038" stroke="#A8CDB8" stroke-opacity="0.4" stroke-width="3"/>
+        <polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle cx="120" cy="114" r="30" fill="#A8CDB8" stroke="#112038" stroke-width="6"/>
+        <path d="M107,114 L117,124 L135,101" fill="none" stroke="#112038" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      MyPlot<span class="dot">.ng</span><span class="brand-tag">BY 7AI</span>
+    </a>
+    <nav class="product-tabs">
+      <a href="../check/index.html">CheckMyPlot</a>
+      <a href="../sell/index.html">SellMyPlot</a>
+      <a href="../buy/index.html">BuyMyPlot</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" style="padding-bottom:0;">
+  <div class="wrap hero-inner">
+    <a href="../index.html" class="back-link">← All products</a>
+    <span class="eyebrow">REFER &amp; EARN</span>
+    <h1>Know someone looking to buy? Send them our way.</h1>
+    <p class="lede" style="margin-bottom:40px;">Get a free referral code. Share it with anyone looking to buy land in Abuja. If their purchase closes through MyPlot, you earn a share of our commission, automatically, no cost to them, no cost to you.</p>
+  </div>
+</section>
+
+<section class="content-section" style="padding-top:48px;">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>How it works</h2>
+      <p>Three steps, and you only get paid once a sale actually completes.</p>
+    </div>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="num">STEP 1</span>
+        <h4>Get your code</h4>
+        <p>Sign up below with your details and choose a referral code. It's free, and takes a minute.</p>
+      </div>
+      <div class="info-item">
+        <span class="num">STEP 2</span>
+        <h4>Share it</h4>
+        <p>Give your code to anyone looking to buy land in Abuja. They enter it when they submit an inquiry on BuyMyPlot.</p>
+      </div>
+      <div class="info-item">
+        <span class="num">STEP 3</span>
+        <h4>Get paid on sale</h4>
+        <p>Nothing is owed until their purchase actually closes. Once it does, your share is calculated automatically.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content-section" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>What you actually earn</h2>
+      <p>A small, honest share of MyPlot's own commission, never an added cost to the seller or buyer.</p>
+    </div>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="num">THE SPLIT</span>
+        <h4>5% of MyPlot's commission</h4>
+        <p>MyPlot earns 5% of a plot's sale price when it sells. You earn 5% of that commission, not 5% of the sale itself.</p>
+      </div>
+      <div class="info-item">
+        <span class="num">EXAMPLE</span>
+        <h4>On a &#8358;18,500,000 sale</h4>
+        <p>MyPlot's commission is &#8358;925,000. Your referral share would be &#8358;46,250.</p>
+      </div>
+      <div class="info-item">
+        <span class="num">NOTE</span>
+        <h4>Deliberately small</h4>
+        <p>This rewards genuine referrals without adding any cost to sellers or buyers. It is not a full time income.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="form-section" style="padding-top:16px;">
+  <div class="wrap">
+    <div class="form-card">
+      <h3>Sign up for a referral code</h3>
+      <p>Open to anyone. Free to join. We'll review your details before your code goes live.</p>
+
+      <div class="form-success">Thank you. We'll be in touch to confirm your referral code within 24 to 48 hours.</div>
+      <div class="form-error">Something went wrong sending your details. Please try again, or reach us directly.</div>
+
+      <form method="POST" data-myplot-form data-supabase-table="referrers">
+        <input type="hidden" name="form_source" value="Referrer signup">
+
+        <div class="form-row-2">
+          <div class="field">
+            <label for="refer-name">Your name</label>
+            <input type="text" id="refer-name" name="name" required>
+          </div>
+          <div class="field">
+            <label for="refer-phone">Phone</label>
+            <input type="tel" id="refer-phone" name="phone" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="refer-email">Email</label>
+          <input type="email" id="refer-email" name="email" required>
+        </div>
+
+        <div class="field">
+          <label for="refer-code">Choose a referral code <span class="hint">(letters and numbers, no spaces)</span></label>
+          <input type="text" id="refer-code" name="referral_code" placeholder="e.g. JOHN2026" required>
+        </div>
+
+        <div class="form-row-2">
+          <div class="field">
+            <label for="refer-payout-method">How should we pay you</label>
+            <input type="text" id="refer-payout-method" name="payout_method" placeholder="e.g. Bank transfer, Opay">
+          </div>
+          <div class="field">
+            <label for="refer-payout-details">Account name / number or wallet ID</label>
+            <input type="text" id="refer-payout-details" name="payout_details">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary form-submit">Get my referral code</button>
+        <p class="form-note">Your payout details are kept private and are never shared with sellers or buyers.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-row">
+      <a href="../index.html" class="brand">
+        <svg class="brand-icon" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="0" y="0" width="160" height="160" rx="34" fill="#112038" stroke="#A8CDB8" stroke-opacity="0.4" stroke-width="3"/>
+          <polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+          <circle cx="120" cy="114" r="30" fill="#A8CDB8" stroke="#112038" stroke-width="6"/>
+          <path d="M107,114 L117,124 L135,101" fill="none" stroke="#112038" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        MyPlot<span class="dot">.ng</span>
+      </a>
+      <div class="footer-links">
+        <a href="../check/index.html">CheckMyPlot</a>
+        <a href="../sell/index.html">SellMyPlot</a>
+        <a href="../buy/index.html">BuyMyPlot</a>
+        <a href="tel:+2348065931712">+234 (0) 806 5931 712</a>
+        <a href="mailto:hello@myplot.ng">hello@myplot.ng</a>
+      </div>
+      <div class="footer-meta">
+        <span>© 2026 MyPlot · myplot.ng</span>
+        <span class="tag7ai">BY 7AI</span>
+      </div>
+    </div>
+    <div class="footer-legal">MyPlot.ng Limited is a registered company in the Federal Republic of Nigeria, RC 9844184</div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

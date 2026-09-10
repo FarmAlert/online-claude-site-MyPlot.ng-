@@ -50,12 +50,7 @@
       <div class="form-success">Thank you. Your report has been received and will be reviewed.</div>
       <div class="form-error">Something went wrong sending your report. Please try again, or reach us directly.</div>
 
-      <!--
-        FORM SETUP FOR ENGINEER:
-        Replace the form action below with your Formspree endpoint for reports.
-        See README.md for full setup instructions.
-      -->
-      <form action="https://formspree.io/f/REPLACE_WITH_REPORT_FORM_ID" method="POST" data-myplot-form>
+      <form method="POST" data-myplot-form data-supabase-table="fraud_reports">
         <input type="hidden" name="form_source" value="Land or agent report">
 
         <div class="form-row-2">
@@ -118,13 +113,15 @@
         <a href="../check/index.html">CheckMyPlot</a>
         <a href="../sell/index.html">SellMyPlot</a>
         <a href="../buy/index.html">BuyMyPlot</a>
-        <a href="mailto:kayode.femi@7ai.africa">Contact</a>
+        <a href="tel:+2348065931712">+234 (0) 806 5931 712</a>
+        <a href="mailto:hello@myplot.ng">hello@myplot.ng</a>
       </div>
       <div class="footer-meta">
         <span>© 2026 MyPlot · myplot.ng</span>
         <span class="tag7ai">BY 7AI</span>
       </div>
     </div>
+    <div class="footer-legal">MyPlot.ng Limited is a registered company in the Federal Republic of Nigeria, RC 9844184</div>
   </div>
 </footer>
 

@@ -120,12 +120,7 @@
       <div class="form-success">Thank you. Your listing request has been received. We will follow up with next steps for the risk check.</div>
       <div class="form-error">Something went wrong sending your request. Please try again, or reach us directly.</div>
 
-      <!--
-        FORM SETUP FOR ENGINEER:
-        Replace the form action below with your Formspree endpoint for SellMyPlot.
-        See README.md for full setup instructions.
-      -->
-      <form action="https://formspree.io/f/REPLACE_WITH_SELL_FORM_ID" method="POST" data-myplot-form>
+      <form method="POST" data-myplot-form data-supabase-table="sell_submissions">
         <input type="hidden" name="form_source" value="SellMyPlot listing request">
 
         <div class="form-row-2">
@@ -214,13 +209,15 @@
         <a href="../check/index.html">CheckMyPlot</a>
         <a href="../sell/index.html">SellMyPlot</a>
         <a href="../buy/index.html">BuyMyPlot</a>
-        <a href="mailto:kayode.femi@7ai.africa">Contact</a>
+        <a href="tel:+2348065931712">+234 (0) 806 5931 712</a>
+        <a href="mailto:hello@myplot.ng">hello@myplot.ng</a>
       </div>
       <div class="footer-meta">
         <span>© 2026 MyPlot · myplot.ng</span>
         <span class="tag7ai">BY 7AI</span>
       </div>
     </div>
+    <div class="footer-legal">MyPlot.ng Limited is a registered company in the Federal Republic of Nigeria, RC 9844184</div>
   </div>
 </footer>
 
