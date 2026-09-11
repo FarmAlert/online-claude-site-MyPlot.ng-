@@ -3,13 +3,157 @@
 // it writes to via data-supabase-table="...". See myplot_schema.sql.
 //
 // The anon key below is safe to expose publicly. Row Level Security on the
-// database allows INSERT only, never SELECT, so nobody can read submissions
-// back through this key.
+// database allows INSERT only for anonymous visitors, never SELECT, so
+// nobody can read submissions back through this key. Once a referrer logs
+// in, MyPlotAuth.authedFetch below uses THEIR OWN session token instead of
+// this key, which is what lets them see their own dashboard data under the
+// "authenticated" RLS policies, and nothing belonging to anyone else.
 
 var SUPABASE_URL = "https://krxsfjzcvhvatplrttmf.supabase.co";
 var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtyeHNmanpjdmh2YXRwbHJ0dG1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkwNjk1MjMsImV4cCI6MjEwNDY0NTUyM30.H_rojfXJhOJHrMrL6vbr46meh27kpeoqE-7N5mSQGts";
 
+// Shared auth helpers, used by the Refer & Earn signup form here, and by
+// the login and dashboard pages in their own page scripts. Session is kept
+// in localStorage so it survives navigating from login to the dashboard.
+window.MyPlotAuth = {
+  signUp: function (email, password, metadata) {
+    return fetch(SUPABASE_URL + "/auth/v1/signup", {
+      method: "POST",
+      headers: { apikey: SUPABASE_ANON_KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email, password: password, data: metadata || {} }),
+    }).then(function (response) {
+      return response.json().then(function (body) {
+        if (!response.ok) throw body;
+        return body;
+      });
+    });
+  },
+
+  signIn: function (email, password) {
+    return fetch(SUPABASE_URL + "/auth/v1/token?grant_type=password", {
+      method: "POST",
+      headers: { apikey: SUPABASE_ANON_KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email, password: password }),
+    }).then(function (response) {
+      return response.json().then(function (body) {
+        if (!response.ok) throw body;
+        localStorage.setItem("myplot_session", JSON.stringify(body));
+        return body;
+      });
+    });
+  },
+
+  getSession: function () {
+    var raw = localStorage.getItem("myplot_session");
+    return raw ? JSON.parse(raw) : null;
+  },
+
+  signOut: function () {
+    localStorage.removeItem("myplot_session");
+  },
+
+  // Authenticated request to the REST API using the logged-in referrer's
+  // own token, so Row Level Security applies their "authenticated" access,
+  // their own profile, their own referred inquiries, nothing else.
+  authedFetch: function (path, options) {
+    var session = this.getSession();
+    if (!session) return Promise.reject({ message: "Not logged in" });
+    options = options || {};
+    options.headers = options.headers || {};
+    options.headers.apikey = SUPABASE_ANON_KEY;
+    options.headers.Authorization = "Bearer " + session.access_token;
+    options.headers["Content-Type"] = "application/json";
+    return fetch(SUPABASE_URL + path, options).then(function (response) {
+      if (response.status === 204) return null;
+      return response.json().then(function (body) {
+        if (!response.ok) throw body;
+        return body;
+      });
+    });
+  },
+};
+
 document.addEventListener("DOMContentLoaded", function () {
+
+  // ---- Referrer signup (Refer & Earn page) ----
+  // This is a real account, not a simple table row, so it is handled
+  // separately from the generic data-supabase-table forms below: create
+  // the Supabase Auth account first, carrying name/phone/payout details as
+  // user metadata, then the login page creates the linked referrers row
+  // (with its auto-generated code) the first time this person logs in.
+  var signupForm = document.querySelector("form[data-referrer-signup]");
+  if (signupForm) {
+    var suSuccess = signupForm.querySelector(".form-success");
+    var suError = signupForm.querySelector(".form-error");
+    var suSubmit = signupForm.querySelector(".form-submit");
+    var suDefaultError = suError ? suError.textContent : "";
+
+    signupForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      var name = signupForm.querySelector('[name="name"]').value.trim();
+      var phone = signupForm.querySelector('[name="phone"]').value.trim();
+      var email = signupForm.querySelector('[name="email"]').value.trim();
+      var password = signupForm.querySelector('[name="password"]').value;
+      var passwordConfirm = signupForm.querySelector('[name="password_confirm"]').value;
+      var payoutMethod = signupForm.querySelector('[name="payout_method"]').value.trim();
+      var payoutDetails = signupForm.querySelector('[name="payout_details"]').value.trim();
+
+      if (suSuccess) suSuccess.style.display = "none";
+      if (suError) {
+        suError.style.display = "none";
+        suError.textContent = suDefaultError;
+      }
+
+      if (password !== passwordConfirm) {
+        if (suError) {
+          suError.textContent = "Passwords do not match.";
+          suError.style.display = "block";
+        }
+        return;
+      }
+      if (password.length < 8) {
+        if (suError) {
+          suError.textContent = "Password must be at least 8 characters.";
+          suError.style.display = "block";
+        }
+        return;
+      }
+
+      var originalLabel = suSubmit ? suSubmit.textContent : "";
+      if (suSubmit) {
+        suSubmit.disabled = true;
+        suSubmit.textContent = "Creating account...";
+      }
+
+      window.MyPlotAuth.signUp(email, password, {
+        name: name,
+        phone: phone,
+        payout_method: payoutMethod || null,
+        payout_details: payoutDetails || null,
+      })
+        .then(function () {
+          signupForm.reset();
+          if (suSuccess) suSuccess.style.display = "block";
+        })
+        .catch(function (err) {
+          var message = suDefaultError;
+          if (err && err.msg && /already registered/i.test(err.msg)) {
+            message = "An account already exists with that email. Try logging in instead.";
+          }
+          if (suError) {
+            suError.textContent = message;
+            suError.style.display = "block";
+          }
+        })
+        .finally(function () {
+          if (suSubmit) {
+            suSubmit.disabled = false;
+            suSubmit.textContent = originalLabel;
+          }
+        });
+    });
+  }
 
   // Build a JSON object from a form, matching the column names in Supabase.
   // - checkboxes become true/false
@@ -52,7 +196,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (estateField) estateField.style.display = "none";
   }
 
-  var forms = document.querySelectorAll("form[data-myplot-form]");
+  var forms = document.querySelectorAll("form[data-myplot-form][data-supabase-table]");
 
   forms.forEach(function (form) {
     var successEl = form.querySelector(".form-success");
@@ -68,7 +212,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (errorEl) {
           errorEl.textContent = defaultError;
           errorEl.style.display = "block";
-          errorEl.scrollIntoView({ behavior: "smooth", block: "center" });
         }
         return;
       }
@@ -99,10 +242,7 @@ document.addEventListener("DOMContentLoaded", function () {
           if (response.ok) {
             form.reset();
             resetConditionalFields(form);
-            if (successEl) {
-              successEl.style.display = "block";
-              successEl.scrollIntoView({ behavior: "smooth", block: "center" });
-            }
+            if (successEl) successEl.style.display = "block";
             return null;
           }
           return response.json().then(function (body) {
@@ -121,7 +261,6 @@ document.addEventListener("DOMContentLoaded", function () {
           if (errorEl) {
             errorEl.textContent = message;
             errorEl.style.display = "block";
-            errorEl.scrollIntoView({ behavior: "smooth", block: "center" });
           }
         })
         .finally(function () {

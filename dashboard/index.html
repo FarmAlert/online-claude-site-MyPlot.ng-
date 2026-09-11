@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Dashboard — MyPlot by 7Ai</title>
+<meta name="description" content="Your MyPlot referral code, QR code, and referral status.">
+<link rel="icon" type="image/svg+xml" href="../assets/logo/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  .dash-wrap{ max-width:1000px; margin:0 auto; padding:56px 32px 100px; }
+  .dash-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:36px; flex-wrap:wrap; gap:16px; }
+  .dash-head h1{ font-family:var(--display); font-size:28px; color:var(--ink); }
+  .logout-link{ font-family:var(--mono); font-size:12.5px; color:var(--ink-faint); text-decoration:underline; cursor:pointer; background:none; border:none; }
+
+  .code-card{ background:var(--navy); border-radius:12px; padding:32px; display:flex; gap:32px; flex-wrap:wrap; align-items:center; margin-bottom:28px; }
+  .code-card .qr-box{ background:#fff; border-radius:8px; padding:14px; flex-shrink:0; }
+  .code-card .details{ flex:1; min-width:240px; }
+  .code-card .label{ font-family:var(--mono); font-size:11px; font-weight:700; color:var(--teal); letter-spacing:1.5px; }
+  .code-card .code{ font-family:var(--display); font-size:36px; font-weight:700; color:#fff; margin-top:6px; letter-spacing:2px; }
+  .code-card .link-row{ display:flex; align-items:center; margin-top:16px; flex-wrap:wrap; }
+  .code-card .link-text{ font-family:var(--mono); font-size:12.5px; color:#C9D2DC; background:rgba(255,255,255,0.06); padding:9px 12px; border-radius:6px; margin-right:10px; margin-bottom:8px; word-break:break-all; }
+  .code-card .copy-btn{ font-family:var(--mono); font-size:12px; font-weight:700; color:var(--navy); background:var(--teal); border:none; padding:9px 14px; border-radius:6px; cursor:pointer; margin-bottom:8px; }
+
+  .stat-row{ display:flex; flex-wrap:wrap; margin-bottom:28px; }
+  .stat-card{ flex:1; min-width:200px; background:#fff; border:1px solid var(--line); border-radius:10px; padding:20px; margin-right:16px; margin-bottom:16px; }
+  .stat-card .num{ font-family:var(--display); font-size:28px; font-weight:700; color:var(--teal-dim); }
+  .stat-card .lbl{ font-size:12.5px; color:var(--ink-faint); margin-top:4px; }
+
+  .table-card{ background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .table-card h3{ padding:18px 20px; border-bottom:1px solid var(--line); font-size:16px; color:var(--ink); }
+  .ref-row{ display:flex; align-items:center; padding:14px 20px; border-bottom:1px solid var(--line-soft, #EFEDE6); }
+  .ref-row:last-child{ border-bottom:none; }
+  .ref-row .who{ flex:1; font-size:13.5px; color:var(--ink); }
+  .ref-row .when{ font-family:var(--mono); font-size:11.5px; color:var(--ink-faint); margin-right:16px; }
+  .status-pill{ font-family:var(--mono); font-size:10.5px; font-weight:700; padding:4px 10px; border-radius:20px; text-transform:uppercase; }
+  .status-new{ background:#EFEDE6; color:var(--ink-faint); }
+  .status-sold{ background:rgba(168,205,184,0.35); color:var(--teal-dim); }
+  .empty-note{ padding:28px 20px; text-align:center; color:var(--ink-faint); font-size:13.5px; }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="nav">
+    <a href="../index.html" class="brand">
+      <svg class="brand-icon" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="0" y="0" width="160" height="160" rx="34" fill="#112038" stroke="#A8CDB8" stroke-opacity="0.4" stroke-width="3"/>
+        <polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle cx="120" cy="114" r="30" fill="#A8CDB8" stroke="#112038" stroke-width="6"/>
+        <path d="M107,114 L117,124 L135,101" fill="none" stroke="#112038" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      MyPlot<span class="dot">.ng</span><span class="brand-tag">BY 7AI</span>
+    </a>
+    <nav class="product-tabs">
+      <a href="../check/index.html">CheckMyPlot</a>
+      <a href="../sell/index.html">SellMyPlot</a>
+      <a href="../buy/index.html">BuyMyPlot</a>
+    </nav>
+  </div>
+</header>
+
+<div class="dash-wrap">
+  <div class="dash-head">
+    <h1 id="welcome-heading">Your dashboard</h1>
+    <button class="logout-link" id="logout-btn">Log out</button>
+  </div>
+
+  <div id="dash-loading" style="color:var(--ink-faint); font-size:14px;">Loading your dashboard...</div>
+  <div id="dash-content" style="display:none;">
+
+    <div class="code-card">
+      <div class="qr-box" id="qr-box"></div>
+      <div class="details">
+        <div class="label">YOUR REFERRAL CODE</div>
+        <div class="code" id="code-display">——————</div>
+        <div class="link-row">
+          <span class="link-text" id="link-display"></span>
+          <button class="copy-btn" id="copy-btn">Copy link</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="num" id="stat-total">0</div>
+        <div class="lbl">Buyers referred</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" id="stat-sold">0</div>
+        <div class="lbl">Purchases closed</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" id="stat-pending">&#8358;0</div>
+        <div class="lbl">Commission pending</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" id="stat-paid">&#8358;0</div>
+        <div class="lbl">Commission paid</div>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <h3>Your referrals</h3>
+      <div id="referrals-list"></div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-row">
+      <a href="../index.html" class="brand">
+        <svg class="brand-icon" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="0" y="0" width="160" height="160" rx="34" fill="#112038" stroke="#A8CDB8" stroke-opacity="0.4" stroke-width="3"/>
+          <polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+          <circle cx="120" cy="114" r="30" fill="#A8CDB8" stroke="#112038" stroke-width="6"/>
+          <path d="M107,114 L117,124 L135,101" fill="none" stroke="#112038" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        MyPlot<span class="dot">.ng</span>
+      </a>
+      <div class="footer-links">
+        <a href="../check/index.html">CheckMyPlot</a>
+        <a href="../sell/index.html">SellMyPlot</a>
+        <a href="../buy/index.html">BuyMyPlot</a>
+        <a href="tel:+2348065931712">+234 (0) 806 5931 712</a>
+        <a href="mailto:hello@myplot.ng">hello@myplot.ng</a>
+      </div>
+      <div class="footer-meta">
+        <span>© 2026 MyPlot · myplot.ng</span>
+        <span class="tag7ai">BY 7AI</span>
+      </div>
+    </div>
+    <div class="footer-legal">MyPlot.ng Limited is a registered company in the Federal Republic of Nigeria, RC 9844184</div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script>
+  (function () {
+    var session = window.MyPlotAuth.getSession();
+    if (!session) {
+      window.location.href = "../login/index.html";
+      return;
+    }
+
+    document.getElementById("logout-btn").addEventListener("click", function () {
+      window.MyPlotAuth.signOut();
+      window.location.href = "../login/index.html";
+    });
+
+    function formatNaira(n) {
+      return "\u20A6" + Number(n || 0).toLocaleString("en-NG");
+    }
+
+    Promise.all([
+      window.MyPlotAuth.authedFetch("/rest/v1/referrers?select=*", { method: "GET" }),
+      // buy_inquiries and sell_submissions are fetched after we know the
+      // referrer's own code and RLS already limits both to rows linked to
+      // this referrer, so no extra filtering is needed here.
+    ])
+      .then(function (results) {
+        var referrer = results[0] && results[0][0];
+        if (!referrer) {
+          throw { message: "No referrer profile found for this account." };
+        }
+
+        document.getElementById("welcome-heading").textContent = "Welcome back, " + referrer.name.split(" ")[0];
+        document.getElementById("code-display").textContent = referrer.referral_code;
+
+        var buyUrl = window.location.origin + "/buy/index.html?ref=" + referrer.referral_code;
+        document.getElementById("link-display").textContent = buyUrl;
+
+        new QRCode(document.getElementById("qr-box"), {
+          text: buyUrl,
+          width: 128,
+          height: 128,
+          colorDark: "#112038",
+          colorLight: "#ffffff",
+        });
+
+        document.getElementById("copy-btn").addEventListener("click", function () {
+          navigator.clipboard.writeText(buyUrl).then(function () {
+            var btn = document.getElementById("copy-btn");
+            var original = btn.textContent;
+            btn.textContent = "Copied!";
+            setTimeout(function () { btn.textContent = original; }, 1500);
+          });
+        });
+
+        return Promise.all([
+          window.MyPlotAuth.authedFetch(
+            "/rest/v1/buy_inquiries?select=*&order=created_at.desc",
+            { method: "GET" }
+          ),
+          window.MyPlotAuth.authedFetch(
+            "/rest/v1/sell_submissions?select=id,status,sale_price,referral_commission,referral_paid,buyer_inquiry_id",
+            { method: "GET" }
+          ),
+        ]);
+      })
+      .then(function (results) {
+        var inquiries = results[0] || [];
+        var sales = results[1] || [];
+
+        var salesByInquiry = {};
+        sales.forEach(function (s) {
+          if (s.buyer_inquiry_id) salesByInquiry[s.buyer_inquiry_id] = s;
+        });
+
+        var totalSold = 0;
+        var pending = 0;
+        var paid = 0;
+
+        sales.forEach(function (s) {
+          if (s.status === "sold") totalSold++;
+          if (s.referral_commission) {
+            if (s.referral_paid) paid += Number(s.referral_commission);
+            else pending += Number(s.referral_commission);
+          }
+        });
+
+        document.getElementById("stat-total").textContent = inquiries.length;
+        document.getElementById("stat-sold").textContent = totalSold;
+        document.getElementById("stat-pending").textContent = formatNaira(pending);
+        document.getElementById("stat-paid").textContent = formatNaira(paid);
+
+        var listEl = document.getElementById("referrals-list");
+        if (inquiries.length === 0) {
+          listEl.innerHTML = '<div class="empty-note">No referrals yet. Share your code or QR code to get started.</div>';
+        } else {
+          listEl.innerHTML = inquiries
+            .map(function (inq) {
+              var sale = salesByInquiry[inq.id];
+              var isSold = sale && sale.status === "sold";
+              var date = new Date(inq.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+              return (
+                '<div class="ref-row">' +
+                '<span class="when">' + date + "</span>" +
+                '<span class="who">' + (inq.preferred_location || "Buyer inquiry") + "</span>" +
+                '<span class="status-pill ' + (isSold ? "status-sold" : "status-new") + '">' +
+                (isSold ? "Purchase closed" : "Inquiry sent") +
+                "</span>" +
+                "</div>"
+              );
+            })
+            .join("");
+        }
+
+        document.getElementById("dash-loading").style.display = "none";
+        document.getElementById("dash-content").style.display = "block";
+      })
+      .catch(function (err) {
+        document.getElementById("dash-loading").textContent =
+          "We could not load your dashboard. Please try logging in again.";
+      });
+  })();
+</script>
+</body>
+</html>

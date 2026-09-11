@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Referrer Login — MyPlot by 7Ai</title>
+<meta name="description" content="Log in to your MyPlot referrer dashboard to see your referral code, QR code, and referral status.">
+<link rel="icon" type="image/svg+xml" href="../assets/logo/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  .login-wrap{ max-width:440px; margin:0 auto; padding:70px 32px 100px; }
+  .login-card{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:36px; }
+  .login-card h1{ font-family:var(--display); font-size:26px; color:var(--ink); margin-bottom:8px; }
+  .login-card p.sub{ font-size:14px; color:var(--ink-faint); margin-bottom:28px; }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="nav">
+    <a href="../index.html" class="brand">
+      <svg class="brand-icon" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="0" y="0" width="160" height="160" rx="34" fill="#112038" stroke="#A8CDB8" stroke-opacity="0.4" stroke-width="3"/>
+        <polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle cx="120" cy="114" r="30" fill="#A8CDB8" stroke="#112038" stroke-width="6"/>
+        <path d="M107,114 L117,124 L135,101" fill="none" stroke="#112038" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      MyPlot<span class="dot">.ng</span><span class="brand-tag">BY 7AI</span>
+    </a>
+    <nav class="product-tabs">
+      <a href="../check/index.html">CheckMyPlot</a>
+      <a href="../sell/index.html">SellMyPlot</a>
+      <a href="../buy/index.html">BuyMyPlot</a>
+    </nav>
+  </div>
+</header>
+
+<div class="login-wrap">
+  <div class="login-card">
+    <h1>Referrer login</h1>
+    <p class="sub">Log in to see your referral code, QR code, and referral status.</p>
+
+    <div class="form-success" style="display:none;">Logged in. Taking you to your dashboard...</div>
+    <div class="form-error" style="display:none;">Incorrect email or password. Please try again.</div>
+
+    <form id="login-form">
+      <div class="field">
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" name="email" required>
+      </div>
+      <div class="field">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" name="password" required>
+      </div>
+      <button type="submit" class="btn btn-primary form-submit" style="width:100%;">Log in</button>
+      <p class="form-note">Don't have a referral code yet? <a href="../refer/index.html">Sign up here</a>.</p>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-row">
+      <a href="../index.html" class="brand">
+        <svg class="brand-icon" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="0" y="0" width="160" height="160" rx="34" fill="#112038" stroke="#A8CDB8" stroke-opacity="0.4" stroke-width="3"/>
+          <polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+          <circle cx="120" cy="114" r="30" fill="#A8CDB8" stroke="#112038" stroke-width="6"/>
+          <path d="M107,114 L117,124 L135,101" fill="none" stroke="#112038" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        MyPlot<span class="dot">.ng</span>
+      </a>
+      <div class="footer-links">
+        <a href="../check/index.html">CheckMyPlot</a>
+        <a href="../sell/index.html">SellMyPlot</a>
+        <a href="../buy/index.html">BuyMyPlot</a>
+        <a href="tel:+2348065931712">+234 (0) 806 5931 712</a>
+        <a href="mailto:hello@myplot.ng">hello@myplot.ng</a>
+      </div>
+      <div class="footer-meta">
+        <span>© 2026 MyPlot · myplot.ng</span>
+        <span class="tag7ai">BY 7AI</span>
+      </div>
+    </div>
+    <div class="footer-legal">MyPlot.ng Limited is a registered company in the Federal Republic of Nigeria, RC 9844184</div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+  // Login, then make sure this referrer has a profile row (their first
+  // login after signing up creates it, using the name/phone/payout details
+  // that were stored as auth metadata at signup time), then go to the
+  // dashboard.
+  document.getElementById("login-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    var form = e.target;
+    var email = form.email.value.trim();
+    var password = form.password.value;
+    var successEl = document.querySelector(".form-success");
+    var errorEl = document.querySelector(".form-error");
+    var submitBtn = form.querySelector(".form-submit");
+
+    successEl.style.display = "none";
+    errorEl.style.display = "none";
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Logging in...";
+
+    window.MyPlotAuth.signIn(email, password)
+      .then(function (session) {
+        // Does a referrer profile already exist for this account?
+        return window.MyPlotAuth.authedFetch("/rest/v1/referrers?select=id", { method: "GET" })
+          .then(function (rows) {
+            if (rows && rows.length > 0) return; // already exists, nothing to do
+
+            // First login after signup: create the profile now, using the
+            // details that were carried as auth metadata since signup.
+            var meta = session.user.user_metadata || {};
+            return window.MyPlotAuth.authedFetch("/rest/v1/referrers", {
+              method: "POST",
+              headers: { Prefer: "return=minimal" },
+              body: JSON.stringify({
+                user_id: session.user.id,
+                name: meta.name || "",
+                phone: meta.phone || "",
+                email: session.user.email,
+                payout_method: meta.payout_method || null,
+                payout_details: meta.payout_details || null,
+              }),
+            });
+          });
+      })
+      .then(function () {
+        successEl.style.display = "block";
+        window.location.href = "../dashboard/index.html";
+      })
+      .catch(function () {
+        errorEl.style.display = "block";
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Log in";
+      });
+  });
+</script>
+</body>
+</html>

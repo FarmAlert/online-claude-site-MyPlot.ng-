@@ -314,7 +314,6 @@ function closeDetail(){
 
       <div class="form-success">Thank you. We will let you know as soon as matching plots are live.</div>
       <div class="form-error">Something went wrong sending your request. Please try again, or reach us directly.</div>
-
       <form method="POST" data-myplot-form data-supabase-table="buy_inquiries">
         <input type="hidden" name="form_source" value="BuyMyPlot notify request">
 
@@ -510,5 +509,17 @@ function renderListings() {
 renderListings();
 </script>
 <script src="../js/main.js"></script>
+<script>
+  // A QR code scan links here as buy/index.html?ref=CODE. Pre-fill the
+  // referral field so the buyer never has to type it themselves.
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    var ref = params.get('ref');
+    if (ref) {
+      var field = document.getElementById('buy-referral');
+      if (field) field.value = ref.toUpperCase();
+    }
+  })();
+</script>
 </body>
 </html>
