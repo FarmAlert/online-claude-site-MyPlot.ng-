@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — MyPlot by 7Ai</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="../assets/logo/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  .login-wrap{ max-width:440px; margin:0 auto; padding:70px 32px 100px; }
+  .login-card{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:36px; }
+  .login-card h1{ font-family:var(--display); font-size:26px; color:var(--ink); margin-bottom:8px; }
+  .login-card p.sub{ font-size:14px; color:var(--ink-faint); margin-bottom:28px; }
+  .field input[type="password"]{ width:100%; }
+
+  .admin-wrap{ max-width:1200px; margin:0 auto; padding:40px 32px 100px; }
+  .admin-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; flex-wrap:wrap; gap:16px; }
+  .admin-head h1{ font-family:var(--display); font-size:26px; color:var(--ink); }
+  .logout-link{ font-family:var(--mono); font-size:12.5px; color:var(--ink-faint); text-decoration:underline; cursor:pointer; background:none; border:none; }
+
+  .tab-row{ display:flex; margin:28px 0 24px; border-bottom:1px solid var(--line); }
+  .tab-btn{ font-family:var(--mono); font-size:12.5px; font-weight:700; color:var(--ink-faint); background:none; border:none; padding:10px 18px 12px; cursor:pointer; border-bottom:2px solid transparent; }
+  .tab-btn.active{ color:var(--navy); border-bottom-color:var(--teal-dim); }
+  .tab-panel{ display:none; }
+  .tab-panel.active{ display:block; }
+
+  .rec-card{ background:#fff; border:1px solid var(--line); border-radius:10px; padding:18px 20px; margin-bottom:14px; }
+  .rec-top{ display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px; margin-bottom:10px; }
+  .rec-name{ font-size:15px; font-weight:700; color:var(--ink); }
+  .rec-meta{ font-family:var(--mono); font-size:11px; color:var(--ink-faint); margin-top:2px; }
+  .rec-field{ font-size:13px; color:var(--ink-soft, #333E48); margin-bottom:4px; }
+  .rec-field b{ color:var(--ink-faint); font-weight:600; }
+  .status-select{ font-family:var(--mono); font-size:11.5px; font-weight:700; padding:6px 10px; border-radius:6px; border:1.5px solid var(--line); background:#fff; text-transform:uppercase; }
+  .sale-toggle{ font-family:var(--mono); font-size:11.5px; font-weight:700; color:var(--teal-dim); background:none; border:none; cursor:pointer; text-decoration:underline; margin-top:8px; }
+  .sale-form{ display:none; margin-top:14px; padding-top:14px; border-top:1px solid var(--line); }
+  .sale-form.open{ display:block; }
+  .sale-form .field{ margin-bottom:14px; }
+  .sale-form label{ display:block; font-size:12.5px; font-weight:700; color:var(--ink); margin-bottom:5px; }
+  .sale-form input, .sale-form select{ width:100%; padding:9px 11px; border:1.5px solid var(--line); border-radius:5px; font-size:13.5px; }
+  .save-btn{ font-family:var(--mono); font-size:12px; font-weight:700; color:#fff; background:var(--navy); border:none; padding:9px 16px; border-radius:6px; cursor:pointer; }
+  .empty-note{ padding:24px; text-align:center; color:var(--ink-faint); font-size:13.5px; }
+  .save-note{ font-size:12px; color:var(--teal-dim); margin-left:10px; }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="nav">
+    <a href="../index.html" class="brand">
+      <svg class="brand-icon" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="0" y="0" width="160" height="160" rx="34" fill="#112038" stroke="#A8CDB8" stroke-opacity="0.4" stroke-width="3"/>
+        <polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle cx="120" cy="114" r="30" fill="#A8CDB8" stroke="#112038" stroke-width="6"/>
+        <path d="M107,114 L117,124 L135,101" fill="none" stroke="#112038" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      MyPlot<span class="dot">.ng</span><span class="brand-tag">BY 7AI</span>
+    </a>
+  </div>
+</header>
+
+<!-- ---------- LOGIN ---------- -->
+<div class="login-wrap" id="login-view">
+  <div class="login-card">
+    <h1>Admin login</h1>
+    <p class="sub">Staff access only. Contact Dr. Femi if you need an account.</p>
+
+    <div class="form-success" style="display:none;">Logged in...</div>
+    <div class="form-error" style="display:none;">Incorrect email or password, or this account does not have admin access.</div>
+
+    <form id="admin-login-form">
+      <div class="field">
+        <label for="admin-email">Email</label>
+        <input type="email" id="admin-email" name="email" required>
+      </div>
+      <div class="field">
+        <label for="admin-password">Password</label>
+        <input type="password" id="admin-password" name="password" required>
+      </div>
+      <button type="submit" class="btn btn-primary form-submit" style="width:100%;">Log in</button>
+    </form>
+  </div>
+</div>
+
+<!-- ---------- ADMIN DASHBOARD ---------- -->
+<div class="admin-wrap" id="admin-view" style="display:none;">
+  <div class="admin-head">
+    <h1 id="admin-welcome">Admin</h1>
+    <button class="logout-link" id="admin-logout-btn">Log out</button>
+  </div>
+
+  <div class="tab-row">
+    <button class="tab-btn active" data-tab="sell">Sell Submissions</button>
+    <button class="tab-btn" data-tab="check">Check Requests</button>
+    <button class="tab-btn" data-tab="buy">Buy Inquiries</button>
+    <button class="tab-btn" data-tab="fraud">Fraud Reports</button>
+    <button class="tab-btn" data-tab="referrers">Referrers</button>
+  </div>
+
+  <div class="tab-panel active" id="panel-sell"><div class="empty-note">Loading...</div></div>
+  <div class="tab-panel" id="panel-check"><div class="empty-note">Loading...</div></div>
+  <div class="tab-panel" id="panel-buy"><div class="empty-note">Loading...</div></div>
+  <div class="tab-panel" id="panel-fraud"><div class="empty-note">Loading...</div></div>
+  <div class="tab-panel" id="panel-referrers"><div class="empty-note">Loading...</div></div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-row">
+      <a href="../index.html" class="brand">
+        <svg class="brand-icon" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="0" y="0" width="160" height="160" rx="34" fill="#112038" stroke="#A8CDB8" stroke-opacity="0.4" stroke-width="3"/>
+          <polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+          <circle cx="120" cy="114" r="30" fill="#A8CDB8" stroke="#112038" stroke-width="6"/>
+          <path d="M107,114 L117,124 L135,101" fill="none" stroke="#112038" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        MyPlot<span class="dot">.ng</span>
+      </a>
+      <div class="footer-meta">
+        <span>© 2026 MyPlot · myplot.ng</span>
+        <span class="tag7ai">BY 7AI</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+(function () {
+  var loginView = document.getElementById("login-view");
+  var adminView = document.getElementById("admin-view");
+
+  function formatNaira(n) {
+    return "\u20A6" + Number(n || 0).toLocaleString("en-NG");
+  }
+  function formatDate(iso) {
+    return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  }
+
+  // ---- Auth gate: must be logged in AND present in the admins table ----
+  function checkAdminAccess() {
+    var session = window.MyPlotAuth.getSession();
+    if (!session) return Promise.resolve(false);
+    return window.MyPlotAuth.authedFetch("/rest/v1/admins?select=name", { method: "GET" })
+      .then(function (rows) {
+        if (rows && rows.length > 0) {
+          document.getElementById("admin-welcome").textContent = "Welcome, " + rows[0].name.split(" ")[0];
+          return true;
+        }
+        return false;
+      })
+      .catch(function () { return false; });
+  }
+
+  function showAdmin() {
+    loginView.style.display = "none";
+    adminView.style.display = "block";
+    loadAllTabs();
+  }
+  function showLogin() {
+    loginView.style.display = "block";
+    adminView.style.display = "none";
+  }
+
+  checkAdminAccess().then(function (isAdmin) {
+    if (isAdmin) showAdmin();
+    else showLogin();
+  });
+
+  document.getElementById("admin-logout-btn").addEventListener("click", function () {
+    window.MyPlotAuth.signOut();
+    showLogin();
+  });
+
+  document.getElementById("admin-login-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var form = e.target;
+    var successEl = document.querySelector("#login-view .form-success");
+    var errorEl = document.querySelector("#login-view .form-error");
+    var submitBtn = form.querySelector(".form-submit");
+
+    successEl.style.display = "none";
+    errorEl.style.display = "none";
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Logging in...";
+
+    window.MyPlotAuth.signIn(form.email.value.trim(), form.password.value)
+      .then(function () { return checkAdminAccess(); })
+      .then(function (isAdmin) {
+        if (!isAdmin) {
+          window.MyPlotAuth.signOut();
+          throw new Error("not an admin");
+        }
+        successEl.style.display = "block";
+        showAdmin();
+      })
+      .catch(function () {
+        errorEl.style.display = "block";
+      })
+      .finally(function () {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Log in";
+      });
+  });
+
+  // ---- Tabs ----
+  document.querySelectorAll(".tab-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll(".tab-btn").forEach(function (b) { b.classList.remove("active"); });
+      document.querySelectorAll(".tab-panel").forEach(function (p) { p.classList.remove("active"); });
+      btn.classList.add("active");
+      document.getElementById("panel-" + btn.getAttribute("data-tab")).classList.add("active");
+    });
+  });
+
+  function updateStatus(table, id, newStatus, noteEl) {
+    window.MyPlotAuth.authedFetch("/rest/v1/" + table + "?id=eq." + id, {
+      method: "PATCH",
+      headers: { Prefer: "return=minimal" },
+      body: JSON.stringify({ status: newStatus }),
+    })
+      .then(function () {
+        if (noteEl) {
+          noteEl.textContent = "Saved";
+          setTimeout(function () { noteEl.textContent = ""; }, 1500);
+        }
+      })
+      .catch(function () {
+        if (noteEl) noteEl.textContent = "Failed to save";
+      });
+  }
+
+  function loadAllTabs() {
+    loadSell();
+    loadCheck();
+    loadBuy();
+    loadFraud();
+    loadReferrers();
+  }
+
+  // ---- Sell Submissions (the one that records completed sales) ----
+  var buyInquiriesCache = [];
+
+  function loadSell() {
+    Promise.all([
+      window.MyPlotAuth.authedFetch("/rest/v1/sell_submissions?select=*&order=created_at.desc", { method: "GET" }),
+      window.MyPlotAuth.authedFetch("/rest/v1/buy_inquiries?select=id,name,preferred_location&order=created_at.desc", { method: "GET" }),
+    ]).then(function (results) {
+      var rows = results[0] || [];
+      buyInquiriesCache = results[1] || [];
+      var panel = document.getElementById("panel-sell");
+
+      if (rows.length === 0) {
+        panel.innerHTML = '<div class="empty-note">No listings yet.</div>';
+        return;
+      }
+
+      panel.innerHTML = rows.map(function (r) {
+        var inquiryOptions = buyInquiriesCache
+          .map(function (inq) {
+            var sel = r.buyer_inquiry_id === inq.id ? " selected" : "";
+            return '<option value="' + inq.id + '"' + sel + '>' + inq.name + " — " + (inq.preferred_location || "") + "</option>";
+          })
+          .join("");
+
+        return (
+          '<div class="rec-card" data-id="' + r.id + '">' +
+          '<div class="rec-top">' +
+            '<div><div class="rec-name">' + r.name + '</div>' +
+            '<div class="rec-meta">' + formatDate(r.created_at) + ' \u00B7 ' + r.listing_location + ' \u00B7 ' + r.property_type + ' / ' + r.listing_type + '</div></div>' +
+            '<select class="status-select" data-table="sell_submissions" data-id="' + r.id + '">' +
+              ['new','awaiting_check','listed','sold','rejected'].map(function (s) {
+                return '<option value="' + s + '"' + (r.status === s ? ' selected' : '') + '>' + s + '</option>';
+              }).join('') +
+            '</select>' +
+          '</div>' +
+          '<div class="rec-field"><b>Phone:</b> ' + r.phone + ' &nbsp; <b>Email:</b> ' + r.email + '</div>' +
+          (r.details ? '<div class="rec-field"><b>Notes:</b> ' + r.details + '</div>' : '') +
+          (r.status === 'sold'
+            ? '<div class="rec-field"><b>Sale price:</b> ' + formatNaira(r.sale_price) +
+              ' &nbsp; <b>MyPlot commission:</b> ' + formatNaira(r.myplot_commission) +
+              ' &nbsp; <b>Referral commission:</b> ' + (r.referral_commission ? formatNaira(r.referral_commission) + (r.referral_paid ? ' (paid)' : ' (pending)') : 'none') +
+              '</div>'
+            : '') +
+          '<button class="sale-toggle" data-id="' + r.id + '">Record / update sale details</button>' +
+          '<div class="sale-form" id="sale-form-' + r.id + '">' +
+            '<div class="field"><label>Which buyer inquiry led to this sale</label>' +
+            '<select class="sale-inquiry">' + '<option value="">— none linked —</option>' + inquiryOptions + '</select></div>' +
+            '<div class="field"><label>Sale price (\u20A6)</label><input type="number" class="sale-price" value="' + (r.sale_price || '') + '"></div>' +
+            '<div class="field"><label>MyPlot commission (\u20A6, 10% of sale price)</label><input type="number" class="sale-myplot-commission" value="' + (r.myplot_commission || '') + '"></div>' +
+            '<div class="field"><label>Referral commission (\u20A6, 1% of sale price, only if referred)</label><input type="number" class="sale-referral-commission" value="' + (r.referral_commission || '') + '"></div>' +
+            '<div class="field"><label><input type="checkbox" class="sale-referral-paid" style="width:auto;display:inline-block;margin-right:6px;"' + (r.referral_paid ? ' checked' : '') + '> Referral commission has been paid</label></div>' +
+            '<button class="save-btn save-sale" data-id="' + r.id + '">Save sale details</button>' +
+            '<span class="save-note"></span>' +
+          '</div>' +
+          '</div>'
+        );
+      }).join('');
+
+      // Auto-calculate commission fields from sale price
+      panel.querySelectorAll('.sale-price').forEach(function (priceInput) {
+        priceInput.addEventListener('input', function () {
+          var card = priceInput.closest('.sale-form');
+          var price = Number(priceInput.value || 0);
+          card.querySelector('.sale-myplot-commission').value = price ? Math.round(price * 0.10) : '';
+          var inquirySelected = card.querySelector('.sale-inquiry').value;
+          card.querySelector('.sale-referral-commission').value = price && inquirySelected ? Math.round(price * 0.01) : '';
+        });
+      });
+
+      panel.querySelectorAll('.sale-toggle').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          document.getElementById('sale-form-' + btn.getAttribute('data-id')).classList.toggle('open');
+        });
+      });
+
+      panel.querySelectorAll('.save-sale').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var id = btn.getAttribute('data-id');
+          var form = document.getElementById('sale-form-' + id);
+          var note = form.querySelector('.save-note');
+          var inquiryId = form.querySelector('.sale-inquiry').value || null;
+          var payload = {
+            status: 'sold',
+            buyer_inquiry_id: inquiryId,
+            sale_price: Number(form.querySelector('.sale-price').value) || null,
+            myplot_commission: Number(form.querySelector('.sale-myplot-commission').value) || null,
+            referral_commission: Number(form.querySelector('.sale-referral-commission').value) || null,
+            referral_paid: form.querySelector('.sale-referral-paid').checked,
+          };
+          window.MyPlotAuth.authedFetch('/rest/v1/sell_submissions?id=eq.' + id, {
+            method: 'PATCH',
+            headers: { Prefer: 'return=minimal' },
+            body: JSON.stringify(payload),
+          }).then(function () {
+            note.textContent = 'Saved';
+            loadSell();
+          }).catch(function () {
+            note.textContent = 'Failed to save';
+          });
+        });
+      });
+
+      panel.querySelectorAll('.status-select').forEach(function (sel) {
+        sel.addEventListener('change', function () {
+          updateStatus('sell_submissions', sel.getAttribute('data-id'), sel.value, null);
+        });
+      });
+    });
+  }
+
+  // ---- Simple status-only tables ----
+  function loadSimpleTable(panelId, table, statusOptions, renderFields) {
+    window.MyPlotAuth.authedFetch("/rest/v1/" + table + "?select=*&order=created_at.desc", { method: "GET" })
+      .then(function (rows) {
+        var panel = document.getElementById(panelId);
+        if (!rows || rows.length === 0) {
+          panel.innerHTML = '<div class="empty-note">Nothing here yet.</div>';
+          return;
+        }
+        panel.innerHTML = rows.map(function (r) {
+          return (
+            '<div class="rec-card">' +
+            '<div class="rec-top">' +
+              '<div><div class="rec-name">' + (r.name || 'Referral') + '</div>' +
+              '<div class="rec-meta">' + formatDate(r.created_at) + '</div></div>' +
+              '<span></span>' +
+              '<select class="status-select" data-table="' + table + '" data-id="' + r.id + '">' +
+                statusOptions.map(function (s) {
+                  return '<option value="' + s + '"' + (r.status === s ? ' selected' : '') + '>' + s + '</option>';
+                }).join('') +
+              '</select>' +
+            '</div>' +
+            renderFields(r) +
+            '</div>'
+          );
+        }).join('');
+        panel.querySelectorAll('.status-select').forEach(function (sel) {
+          sel.addEventListener('change', function () {
+            updateStatus(sel.getAttribute('data-table'), sel.getAttribute('data-id'), sel.value, null);
+          });
+        });
+      });
+  }
+
+  function loadCheck() {
+    loadSimpleTable('panel-check', 'check_requests', ['new', 'in_review', 'completed', 'cancelled'], function (r) {
+      return '<div class="rec-field"><b>Phone:</b> ' + r.phone + ' &nbsp; <b>Email:</b> ' + r.email + '</div>' +
+        '<div class="rec-field"><b>Plot:</b> ' + r.plot_location + (r.plot_count ? ' (' + r.plot_count + ')' : '') + '</div>' +
+        (r.addon_insight || r.addon_foresight ? '<div class="rec-field"><b>Add-ons:</b> ' + [r.addon_insight ? 'Insight' : '', r.addon_foresight ? 'Foresight' : ''].filter(Boolean).join(', ') + '</div>' : '') +
+        (r.details ? '<div class="rec-field"><b>Notes:</b> ' + r.details + '</div>' : '');
+    });
+  }
+
+  function loadBuy() {
+    loadSimpleTable('panel-buy', 'buy_inquiries', ['new', 'contacted', 'closed'], function (r) {
+      return '<div class="rec-field"><b>Phone:</b> ' + r.phone + ' &nbsp; <b>Email:</b> ' + r.email + '</div>' +
+        (r.preferred_location ? '<div class="rec-field"><b>Preferred location:</b> ' + r.preferred_location + '</div>' : '') +
+        (r.budget_range ? '<div class="rec-field"><b>Budget:</b> ' + r.budget_range + '</div>' : '') +
+        (r.referral_code ? '<div class="rec-field"><b>Referral code used:</b> ' + r.referral_code + '</div>' : '') +
+        (r.details ? '<div class="rec-field"><b>Notes:</b> ' + r.details + '</div>' : '');
+    });
+  }
+
+  function loadFraud() {
+    loadSimpleTable('panel-fraud', 'fraud_reports', ['new', 'investigating', 'resolved', 'dismissed'], function (r) {
+      return '<div class="rec-field"><b>Phone:</b> ' + r.phone + '</div>' +
+        '<div class="rec-field"><b>Plot / area:</b> ' + r.plot_location + '</div>' +
+        (r.agent_name ? '<div class="rec-field"><b>Agent named:</b> ' + r.agent_name + '</div>' : '') +
+        '<div class="rec-field"><b>Type:</b> ' + r.report_type + '</div>' +
+        '<div class="rec-field"><b>Details:</b> ' + r.details + '</div>';
+    });
+  }
+
+  function loadReferrers() {
+    loadSimpleTable('panel-referrers', 'referrers', ['pending', 'active', 'suspended'], function (r) {
+      return '<div class="rec-field"><b>Code:</b> ' + r.referral_code + ' &nbsp; <b>Phone:</b> ' + r.phone + ' &nbsp; <b>Email:</b> ' + r.email + '</div>' +
+        (r.payout_method ? '<div class="rec-field"><b>Payout:</b> ' + r.payout_method + ' \u2014 ' + (r.payout_details || 'no details given') + '</div>' : '') +
+        '<div class="rec-field"><b>Total earned:</b> ' + formatNaira(r.total_earned) + '</div>';
+    });
+  }
+})();
+</script>
+</body>
+</html>
