@@ -68,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (errorEl) {
           errorEl.textContent = defaultError;
           errorEl.style.display = "block";
+          errorEl.scrollIntoView({ behavior: "smooth", block: "center" });
         }
         return;
       }
@@ -98,7 +99,10 @@ document.addEventListener("DOMContentLoaded", function () {
           if (response.ok) {
             form.reset();
             resetConditionalFields(form);
-            if (successEl) successEl.style.display = "block";
+            if (successEl) {
+              successEl.style.display = "block";
+              successEl.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
             return null;
           }
           return response.json().then(function (body) {
@@ -117,6 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
           if (errorEl) {
             errorEl.textContent = message;
             errorEl.style.display = "block";
+            errorEl.scrollIntoView({ behavior: "smooth", block: "center" });
           }
         })
         .finally(function () {
