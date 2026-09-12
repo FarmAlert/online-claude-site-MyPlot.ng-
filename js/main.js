@@ -233,8 +233,16 @@ document.addEventListener("DOMContentLoaded", function () {
   var forms = document.querySelectorAll("form[data-myplot-form][data-supabase-table]");
 
   forms.forEach(function (form) {
-    var successEl = form.querySelector(".form-success");
-    var errorEl = form.querySelector(".form-error");
+    // On most pages the success and error divs sit just above the <form>
+    // rather than inside it, so a plain form.querySelector finds nothing.
+    // Look inside the form first, then fall back to the surrounding card.
+    var card = form.closest(".form-card") || form.parentElement;
+    function findMsg(cls) {
+      return form.querySelector(cls) || (card ? card.querySelector(cls) : null);
+    }
+
+    var successEl = findMsg(".form-success");
+    var errorEl = findMsg(".form-error");
     var submitBtn = form.querySelector(".form-submit");
     var defaultError = errorEl ? errorEl.textContent : "";
 
