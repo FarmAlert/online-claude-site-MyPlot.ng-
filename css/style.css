@@ -94,6 +94,12 @@ header.site{
 }
 .product-tabs a:hover{color:#fff;}
 .product-tabs a.active{background:var(--teal); color:var(--navy);}
+.product-tabs a.nav-login{
+  margin-left:6px; padding-left:16px;
+  border-left:1px solid var(--line-navy);
+  color:var(--teal);
+}
+.product-tabs a.nav-login:hover{color:#fff;}
 
 /* ---------- BUTTONS ---------- */
 .btn{

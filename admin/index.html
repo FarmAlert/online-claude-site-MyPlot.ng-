@@ -202,11 +202,11 @@
           window.MyPlotAuth.signOut();
           throw new Error("not an admin");
         }
-        successEl.style.display = "block";
+        showMessage(successEl);
         showAdmin();
       })
       .catch(function () {
-        errorEl.style.display = "block";
+        showMessage(errorEl);
       })
       .finally(function () {
         submitBtn.disabled = false;

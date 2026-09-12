@@ -73,6 +73,18 @@ window.MyPlotAuth = {
   },
 };
 
+// Shows a success or error message and scrolls it into view. Used
+// everywhere a form shows a result, so the message is never missed on a
+// long form where the submit button sits far from the top of the page.
+// Centralised here on purpose: this exact fix has been dropped three times
+// across three separate builds because it lived as separate inline calls
+// scattered through the file. One shared function is much harder to lose.
+function showMessage(el) {
+  if (!el) return;
+  el.style.display = "block";
+  el.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
 
   // ---- Referrer signup (Refer & Earn page) ----
@@ -109,14 +121,14 @@ document.addEventListener("DOMContentLoaded", function () {
       if (password !== passwordConfirm) {
         if (suError) {
           suError.textContent = "Passwords do not match.";
-          suError.style.display = "block";
+          showMessage(suError);
         }
         return;
       }
       if (password.length < 8) {
         if (suError) {
           suError.textContent = "Password must be at least 8 characters.";
-          suError.style.display = "block";
+          showMessage(suError);
         }
         return;
       }
@@ -134,9 +146,25 @@ document.addEventListener("DOMContentLoaded", function () {
         bank_account_number: bankAccountNumber || null,
         bank_name: bankName || null,
       })
-        .then(function () {
+        .then(function (result) {
+          // Supabase deliberately returns a normal success response when the
+          // email is already registered, rather than an error, so that an
+          // attacker cannot discover which emails are registered by probing
+          // signup. The tell is an empty identities array on the returned
+          // user. Treat that case as a failure, not a success.
+          var alreadyRegistered =
+            result && result.user && Array.isArray(result.user.identities) && result.user.identities.length === 0;
+
+          if (alreadyRegistered) {
+            if (suError) {
+              suError.textContent = "An account with that email already exists. Please log in instead.";
+              showMessage(suError);
+            }
+            return;
+          }
+
           signupForm.reset();
-          if (suSuccess) suSuccess.style.display = "block";
+          if (suSuccess) showMessage(suSuccess);
         })
         .catch(function (err) {
           var message = suDefaultError;
@@ -145,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }
           if (suError) {
             suError.textContent = message;
-            suError.style.display = "block";
+            showMessage(suError);
           }
         })
         .finally(function () {
@@ -213,7 +241,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!table) {
         if (errorEl) {
           errorEl.textContent = defaultError;
-          errorEl.style.display = "block";
+          showMessage(errorEl);
         }
         return;
       }
@@ -244,7 +272,7 @@ document.addEventListener("DOMContentLoaded", function () {
           if (response.ok) {
             form.reset();
             resetConditionalFields(form);
-            if (successEl) successEl.style.display = "block";
+            if (successEl) showMessage(successEl);
             return null;
           }
           return response.json().then(function (body) {
@@ -262,7 +290,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           if (errorEl) {
             errorEl.textContent = message;
-            errorEl.style.display = "block";
+            showMessage(errorEl);
           }
         })
         .finally(function () {

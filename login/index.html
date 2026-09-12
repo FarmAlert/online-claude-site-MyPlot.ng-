@@ -34,6 +34,7 @@
       <a href="../check/index.html">CheckMyPlot</a>
       <a href="../sell/index.html">SellMyPlot</a>
       <a href="../buy/index.html">BuyMyPlot</a>
+      <a href="../login/index.html" class="nav-login">Log in</a>
     </nav>
   </div>
 </header>
@@ -138,11 +139,11 @@
           });
       })
       .then(function () {
-        successEl.style.display = "block";
+        showMessage(successEl);
         window.location.href = "../dashboard/index.html";
       })
       .catch(function () {
-        errorEl.style.display = "block";
+        showMessage(errorEl);
         submitBtn.disabled = false;
         submitBtn.textContent = "Log in";
       });
