@@ -152,8 +152,12 @@ document.addEventListener("DOMContentLoaded", function () {
           // attacker cannot discover which emails are registered by probing
           // signup. The tell is an empty identities array on the returned
           // user. Treat that case as a failure, not a success.
+          // The signup endpoint returns the user object at the top level,
+          // while the token endpoint wraps it in .user, so accept either
+          // shape rather than assuming one of them.
+          var signedUpUser = (result && result.user) || result;
           var alreadyRegistered =
-            result && result.user && Array.isArray(result.user.identities) && result.user.identities.length === 0;
+            signedUpUser && Array.isArray(signedUpUser.identities) && signedUpUser.identities.length === 0;
 
           if (alreadyRegistered) {
             if (suError) {
