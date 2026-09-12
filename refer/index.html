@@ -99,14 +99,12 @@
       <h3>Sign up for a referral code</h3>
       <p>Open to anyone. Free to join. We'll review your details before your code goes live.</p>
 
-      <div class="form-success">Account created. Check your email to confirm your address, then log in to see your referral code and dashboard.</div>
-      <div class="form-error">Something went wrong creating your account. Please try again, or reach us directly.</div>
       <form method="POST" data-myplot-form data-referrer-signup>
         <input type="hidden" name="form_source" value="Referrer signup">
 
         <div class="form-row-2">
           <div class="field">
-            <label for="refer-name">Your name</label>
+            <label for="refer-name">Full name <span class="hint">(Surname first)</span></label>
             <input type="text" id="refer-name" name="name" required>
           </div>
           <div class="field">
@@ -123,27 +121,39 @@
         <div class="form-row-2">
           <div class="field">
             <label for="refer-password">Choose a password</label>
-            <input type="password" id="refer-password" name="password" minlength="8" required>
+            <div class="password-field">
+              <input type="password" id="refer-password" name="password" minlength="8" required>
+              <button type="button" class="password-toggle" data-for="refer-password" aria-label="Show password">Show</button>
+            </div>
           </div>
           <div class="field">
             <label for="refer-password-confirm">Confirm password</label>
-            <input type="password" id="refer-password-confirm" name="password_confirm" minlength="8" required>
+            <div class="password-field">
+              <input type="password" id="refer-password-confirm" name="password_confirm" minlength="8" required>
+              <button type="button" class="password-toggle" data-for="refer-password-confirm" aria-label="Show password">Show</button>
+            </div>
           </div>
         </div>
 
-        <div class="form-row-2">
+        <div class="form-row-3">
           <div class="field">
-            <label for="refer-payout-method">How should we pay you</label>
-            <input type="text" id="refer-payout-method" name="payout_method" placeholder="e.g. Bank transfer, Opay">
+            <label for="refer-bank-account-name">Account name</label>
+            <input type="text" id="refer-bank-account-name" name="bank_account_name">
           </div>
           <div class="field">
-            <label for="refer-payout-details">Account name / number or wallet ID</label>
-            <input type="text" id="refer-payout-details" name="payout_details">
+            <label for="refer-bank-account-number">Account number</label>
+            <input type="text" id="refer-bank-account-number" name="bank_account_number">
+          </div>
+          <div class="field">
+            <label for="refer-bank-name">Bank name</label>
+            <input type="text" id="refer-bank-name" name="bank_name">
           </div>
         </div>
 
         <button type="submit" class="btn btn-primary form-submit">Create my account</button>
-        <p class="form-note">Your referral code is generated automatically once you sign up. Your payout details are kept private and are never shared with sellers or buyers. Already have an account? <a href="../login/index.html">Log in</a>.</p>
+        <div class="form-success">Account created. Check your email to confirm your address, then log in to see your referral code and dashboard.</div>
+        <div class="form-error">Something went wrong creating your account. Please try again, or reach us directly.</div>
+        <p class="form-note">Your referral code is generated automatically once you sign up. Your bank details are kept private and are never shared with sellers or buyers. Already have an account? <a href="../login/index.html">Log in</a>.</p>
       </form>
     </div>
   </div>

@@ -96,8 +96,9 @@ document.addEventListener("DOMContentLoaded", function () {
       var email = signupForm.querySelector('[name="email"]').value.trim();
       var password = signupForm.querySelector('[name="password"]').value;
       var passwordConfirm = signupForm.querySelector('[name="password_confirm"]').value;
-      var payoutMethod = signupForm.querySelector('[name="payout_method"]').value.trim();
-      var payoutDetails = signupForm.querySelector('[name="payout_details"]').value.trim();
+      var bankAccountName = signupForm.querySelector('[name="bank_account_name"]').value.trim();
+      var bankAccountNumber = signupForm.querySelector('[name="bank_account_number"]').value.trim();
+      var bankName = signupForm.querySelector('[name="bank_name"]').value.trim();
 
       if (suSuccess) suSuccess.style.display = "none";
       if (suError) {
@@ -129,8 +130,9 @@ document.addEventListener("DOMContentLoaded", function () {
       window.MyPlotAuth.signUp(email, password, {
         name: name,
         phone: phone,
-        payout_method: payoutMethod || null,
-        payout_details: payoutDetails || null,
+        bank_account_name: bankAccountName || null,
+        bank_account_number: bankAccountNumber || null,
+        bank_name: bankName || null,
       })
         .then(function () {
           signupForm.reset();
@@ -282,4 +284,18 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
   }
+
+  // Show/hide toggle for any password field, used on signup, login, and
+  // the admin login. Each toggle button declares which input it controls
+  // via data-for="input-id".
+  document.querySelectorAll(".password-toggle").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var input = document.getElementById(btn.getAttribute("data-for"));
+      if (!input) return;
+      var showing = input.type === "text";
+      input.type = showing ? "password" : "text";
+      btn.textContent = showing ? "Show" : "Hide";
+      btn.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+    });
+  });
 });

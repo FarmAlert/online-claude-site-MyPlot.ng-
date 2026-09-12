@@ -43,9 +43,6 @@
     <h1>Referrer login</h1>
     <p class="sub">Log in to see your referral code, QR code, and referral status.</p>
 
-    <div class="form-success" style="display:none;">Logged in. Taking you to your dashboard...</div>
-    <div class="form-error" style="display:none;">Incorrect email or password. Please try again.</div>
-
     <form id="login-form">
       <div class="field">
         <label for="login-email">Email</label>
@@ -53,9 +50,14 @@
       </div>
       <div class="field">
         <label for="login-password">Password</label>
-        <input type="password" id="login-password" name="password" required>
+        <div class="password-field">
+          <input type="password" id="login-password" name="password" required>
+          <button type="button" class="password-toggle" data-for="login-password" aria-label="Show password">Show</button>
+        </div>
       </div>
       <button type="submit" class="btn btn-primary form-submit" style="width:100%;">Log in</button>
+      <div class="form-success" style="display:none;">Logged in. Taking you to your dashboard...</div>
+      <div class="form-error" style="display:none;">Incorrect email or password. Please try again.</div>
       <p class="form-note">Don't have a referral code yet? <a href="../refer/index.html">Sign up here</a>.</p>
     </form>
   </div>
@@ -128,8 +130,9 @@
                 name: meta.name || "",
                 phone: meta.phone || "",
                 email: session.user.email,
-                payout_method: meta.payout_method || null,
-                payout_details: meta.payout_details || null,
+                bank_account_name: meta.bank_account_name || null,
+                bank_account_number: meta.bank_account_number || null,
+                bank_name: meta.bank_name || null,
               }),
             });
           });

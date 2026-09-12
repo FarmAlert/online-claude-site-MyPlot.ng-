@@ -25,6 +25,12 @@
   .tab-row{ display:flex; margin:28px 0 24px; border-bottom:1px solid var(--line); }
   .tab-btn{ font-family:var(--mono); font-size:12.5px; font-weight:700; color:var(--ink-faint); background:none; border:none; padding:10px 18px 12px; cursor:pointer; border-bottom:2px solid transparent; }
   .tab-btn.active{ color:var(--navy); border-bottom-color:var(--teal-dim); }
+  .tab-badge{
+    display:inline-block; min-width:18px; padding:1px 6px; margin-left:4px;
+    background:#D2574A; color:#fff; border-radius:20px; font-size:10.5px; font-weight:700;
+    line-height:16px; text-align:center; vertical-align:middle;
+  }
+  .tab-badge:empty{ display:none; }
   .tab-panel{ display:none; }
   .tab-panel.active{ display:block; }
 
@@ -68,9 +74,6 @@
     <h1>Admin login</h1>
     <p class="sub">Staff access only. Contact Dr. Femi if you need an account.</p>
 
-    <div class="form-success" style="display:none;">Logged in...</div>
-    <div class="form-error" style="display:none;">Incorrect email or password, or this account does not have admin access.</div>
-
     <form id="admin-login-form">
       <div class="field">
         <label for="admin-email">Email</label>
@@ -78,9 +81,14 @@
       </div>
       <div class="field">
         <label for="admin-password">Password</label>
-        <input type="password" id="admin-password" name="password" required>
+        <div class="password-field">
+          <input type="password" id="admin-password" name="password" required>
+          <button type="button" class="password-toggle" data-for="admin-password" aria-label="Show password">Show</button>
+        </div>
       </div>
       <button type="submit" class="btn btn-primary form-submit" style="width:100%;">Log in</button>
+      <div class="form-success" style="display:none;">Logged in...</div>
+      <div class="form-error" style="display:none;">Incorrect email or password, or this account does not have admin access.</div>
     </form>
   </div>
 </div>
@@ -93,11 +101,11 @@
   </div>
 
   <div class="tab-row">
-    <button class="tab-btn active" data-tab="sell">Sell Submissions</button>
-    <button class="tab-btn" data-tab="check">Check Requests</button>
-    <button class="tab-btn" data-tab="buy">Buy Inquiries</button>
-    <button class="tab-btn" data-tab="fraud">Fraud Reports</button>
-    <button class="tab-btn" data-tab="referrers">Referrers</button>
+    <button class="tab-btn active" data-tab="sell">Sell Submissions <span class="tab-badge" id="badge-sell"></span></button>
+    <button class="tab-btn" data-tab="check">Check Requests <span class="tab-badge" id="badge-check"></span></button>
+    <button class="tab-btn" data-tab="buy">Buy Inquiries <span class="tab-badge" id="badge-buy"></span></button>
+    <button class="tab-btn" data-tab="fraud">Fraud Reports <span class="tab-badge" id="badge-fraud"></span></button>
+    <button class="tab-btn" data-tab="referrers">Referrers <span class="tab-badge" id="badge-referrers"></span></button>
   </div>
 
   <div class="tab-panel active" id="panel-sell"><div class="empty-note">Loading...</div></div>
@@ -244,6 +252,11 @@
   // ---- Sell Submissions (the one that records completed sales) ----
   var buyInquiriesCache = [];
 
+  function setBadge(id, count) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = count > 0 ? String(count) : "";
+  }
+
   function loadSell() {
     Promise.all([
       window.MyPlotAuth.authedFetch("/rest/v1/sell_submissions?select=*&order=created_at.desc", { method: "GET" }),
@@ -252,6 +265,8 @@
       var rows = results[0] || [];
       buyInquiriesCache = results[1] || [];
       var panel = document.getElementById("panel-sell");
+
+      setBadge("badge-sell", rows.filter(function (r) { return r.status === "new"; }).length);
 
       if (rows.length === 0) {
         panel.innerHTML = '<div class="empty-note">No listings yet.</div>';
@@ -353,11 +368,15 @@
   }
 
   // ---- Simple status-only tables ----
-  function loadSimpleTable(panelId, table, statusOptions, renderFields) {
+  function loadSimpleTable(panelId, table, statusOptions, badgeId, renderFields) {
     window.MyPlotAuth.authedFetch("/rest/v1/" + table + "?select=*&order=created_at.desc", { method: "GET" })
       .then(function (rows) {
         var panel = document.getElementById(panelId);
-        if (!rows || rows.length === 0) {
+        rows = rows || [];
+
+        setBadge(badgeId, rows.filter(function (r) { return r.status === statusOptions[0]; }).length);
+
+        if (rows.length === 0) {
           panel.innerHTML = '<div class="empty-note">Nothing here yet.</div>';
           return;
         }
@@ -387,7 +406,7 @@
   }
 
   function loadCheck() {
-    loadSimpleTable('panel-check', 'check_requests', ['new', 'in_review', 'completed', 'cancelled'], function (r) {
+    loadSimpleTable('panel-check', 'check_requests', ['new', 'in_review', 'completed', 'cancelled'], 'badge-check', function (r) {
       return '<div class="rec-field"><b>Phone:</b> ' + r.phone + ' &nbsp; <b>Email:</b> ' + r.email + '</div>' +
         '<div class="rec-field"><b>Plot:</b> ' + r.plot_location + (r.plot_count ? ' (' + r.plot_count + ')' : '') + '</div>' +
         (r.addon_insight || r.addon_foresight ? '<div class="rec-field"><b>Add-ons:</b> ' + [r.addon_insight ? 'Insight' : '', r.addon_foresight ? 'Foresight' : ''].filter(Boolean).join(', ') + '</div>' : '') +
@@ -396,7 +415,7 @@
   }
 
   function loadBuy() {
-    loadSimpleTable('panel-buy', 'buy_inquiries', ['new', 'contacted', 'closed'], function (r) {
+    loadSimpleTable('panel-buy', 'buy_inquiries', ['new', 'contacted', 'closed'], 'badge-buy', function (r) {
       return '<div class="rec-field"><b>Phone:</b> ' + r.phone + ' &nbsp; <b>Email:</b> ' + r.email + '</div>' +
         (r.preferred_location ? '<div class="rec-field"><b>Preferred location:</b> ' + r.preferred_location + '</div>' : '') +
         (r.budget_range ? '<div class="rec-field"><b>Budget:</b> ' + r.budget_range + '</div>' : '') +
@@ -406,7 +425,7 @@
   }
 
   function loadFraud() {
-    loadSimpleTable('panel-fraud', 'fraud_reports', ['new', 'investigating', 'resolved', 'dismissed'], function (r) {
+    loadSimpleTable('panel-fraud', 'fraud_reports', ['new', 'investigating', 'resolved', 'dismissed'], 'badge-fraud', function (r) {
       return '<div class="rec-field"><b>Phone:</b> ' + r.phone + '</div>' +
         '<div class="rec-field"><b>Plot / area:</b> ' + r.plot_location + '</div>' +
         (r.agent_name ? '<div class="rec-field"><b>Agent named:</b> ' + r.agent_name + '</div>' : '') +
@@ -416,9 +435,9 @@
   }
 
   function loadReferrers() {
-    loadSimpleTable('panel-referrers', 'referrers', ['pending', 'active', 'suspended'], function (r) {
+    loadSimpleTable('panel-referrers', 'referrers', ['pending', 'active', 'suspended'], 'badge-referrers', function (r) {
       return '<div class="rec-field"><b>Code:</b> ' + r.referral_code + ' &nbsp; <b>Phone:</b> ' + r.phone + ' &nbsp; <b>Email:</b> ' + r.email + '</div>' +
-        (r.payout_method ? '<div class="rec-field"><b>Payout:</b> ' + r.payout_method + ' \u2014 ' + (r.payout_details || 'no details given') + '</div>' : '') +
+        (r.bank_account_name ? '<div class="rec-field"><b>Bank:</b> ' + r.bank_name + ' \u2014 ' + r.bank_account_name + ', ' + r.bank_account_number + '</div>' : '') +
         '<div class="rec-field"><b>Total earned:</b> ' + formatNaira(r.total_earned) + '</div>';
     });
   }
