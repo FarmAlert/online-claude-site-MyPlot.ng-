@@ -188,8 +188,6 @@
       <h3>Request a plot check</h3>
       <p>Fill in as much as you can. We will follow up if anything is missing.</p>
 
-      <div class="form-success">Thank you. Your request has been received. We will be in touch within 24 to 48 hours.</div>
-      <div class="form-error">Something went wrong sending your request. Please try again, or reach us directly.</div>
       <form method="POST" data-myplot-form data-supabase-table="check_requests">
         <input type="hidden" name="form_source" value="CheckMyPlot request">
 
@@ -239,6 +237,8 @@
         </div>
 
         <button type="submit" class="btn btn-primary form-submit">Submit request</button>
+        <div class="form-success">Thank you. Your request has been received. We will be in touch within 24 to 48 hours.</div>
+        <div class="form-error">Something went wrong sending your request. Please try again, or reach us directly.</div>
         <p class="form-note">We typically respond within 24 to 48 hours. This submits a request only, payment is arranged after we confirm the scope of the check.</p>
       </form>
     </div>

@@ -118,8 +118,6 @@
       <h3>Submit a listing</h3>
       <p>This starts the process. Your CheckMyPlot risk check must be confirmed before your listing goes live, listing itself is free.</p>
 
-      <div class="form-success">Thank you. Your listing request has been received. We will follow up with next steps for the risk check.</div>
-      <div class="form-error">Something went wrong sending your request. Please try again, or reach us directly.</div>
       <form method="POST" data-myplot-form data-supabase-table="sell_submissions">
         <input type="hidden" name="form_source" value="SellMyPlot listing request">
 
@@ -187,6 +185,8 @@
         </div>
 
         <button type="submit" class="btn btn-primary form-submit">Submit listing request</button>
+        <div class="form-success">Thank you. Your listing request has been received. We will follow up with next steps for the risk check.</div>
+        <div class="form-error">Something went wrong sending your request. Please try again, or reach us directly.</div>
         <p class="form-note">CheckMyPlot must be confirmed before your listing goes live. Listing is free, a 10% commission applies only if the plot sells.</p>
       </form>
     </div>

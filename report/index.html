@@ -48,8 +48,6 @@
       <h3>Report a plot or agent</h3>
       <p>Give us as much detail as you can. We review every report before it affects any risk score.</p>
 
-      <div class="form-success">Thank you. Your report has been received and will be reviewed.</div>
-      <div class="form-error">Something went wrong sending your report. Please try again, or reach us directly.</div>
       <form method="POST" data-myplot-form data-supabase-table="fraud_reports">
         <input type="hidden" name="form_source" value="Land or agent report">
 
@@ -91,6 +89,8 @@
         </div>
 
         <button type="submit" class="btn btn-dark form-submit">Submit report</button>
+        <div class="form-success">Thank you. Your report has been received and will be reviewed.</div>
+        <div class="form-error">Something went wrong sending your report. Please try again, or reach us directly.</div>
         <p class="form-note">Your identity is never published. Reports are only made public, in aggregated form, after multiple independent reports or manual review.</p>
       </form>
     </div>

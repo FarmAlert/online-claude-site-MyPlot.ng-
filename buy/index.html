@@ -313,8 +313,6 @@ function closeDetail(){
       <h3>Get notified when listings go live</h3>
       <p>Tell us what you are looking for and we will reach out as matching plots are added.</p>
 
-      <div class="form-success">Thank you. We will let you know as soon as matching plots are live.</div>
-      <div class="form-error">Something went wrong sending your request. Please try again, or reach us directly.</div>
       <form method="POST" data-myplot-form data-supabase-table="buy_inquiries">
         <input type="hidden" name="form_source" value="BuyMyPlot notify request">
 
@@ -355,6 +353,8 @@ function closeDetail(){
         </div>
 
         <button type="submit" class="btn btn-primary form-submit">Notify me</button>
+        <div class="form-success">Thank you. We will let you know as soon as matching plots are live.</div>
+        <div class="form-error">Something went wrong sending your request. Please try again, or reach us directly.</div>
         <p class="form-note">No payment is required to register interest. Browsing BuyMyPlot will always be free.</p>
       </form>
     </div>
