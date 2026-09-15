@@ -297,6 +297,7 @@
           (r.status === 'sold'
             ? '<div class="rec-field"><b>Sale price:</b> ' + formatNaira(r.sale_price) +
               ' &nbsp; <b>MyPlot commission:</b> ' + formatNaira(r.myplot_commission) +
+              ' &nbsp; <b>Buyer legal/admin fee:</b> ' + formatNaira(r.buyer_legal_admin_fee) +
               ' &nbsp; <b>Referral commission:</b> ' + (r.referral_commission ? formatNaira(r.referral_commission) + (r.referral_paid ? ' (paid)' : ' (pending)') : 'none') +
               '</div>'
             : '') +
@@ -305,7 +306,8 @@
             '<div class="field"><label>Which buyer inquiry led to this sale</label>' +
             '<select class="sale-inquiry">' + '<option value="">— none linked —</option>' + inquiryOptions + '</select></div>' +
             '<div class="field"><label>Sale price (\u20A6)</label><input type="number" class="sale-price" value="' + (r.sale_price || '') + '"></div>' +
-            '<div class="field"><label>MyPlot commission (\u20A6, 10% of sale price)</label><input type="number" class="sale-myplot-commission" value="' + (r.myplot_commission || '') + '"></div>' +
+            '<div class="field"><label>MyPlot commission (\u20A6, 10% of sale price, paid by seller)</label><input type="number" class="sale-myplot-commission" value="' + (r.myplot_commission || '') + '"></div>' +
+            '<div class="field"><label>Buyer legal & administrative fee (\u20A6, 5% of sale price, paid by buyer)</label><input type="number" class="sale-buyer-fee" value="' + (r.buyer_legal_admin_fee || '') + '"></div>' +
             '<div class="field"><label>Referral commission (\u20A6, 1% of sale price, only if referred)</label><input type="number" class="sale-referral-commission" value="' + (r.referral_commission || '') + '"></div>' +
             '<div class="field"><label><input type="checkbox" class="sale-referral-paid" style="width:auto;display:inline-block;margin-right:6px;"' + (r.referral_paid ? ' checked' : '') + '> Referral commission has been paid</label></div>' +
             '<button class="save-btn save-sale" data-id="' + r.id + '">Save sale details</button>' +
@@ -321,6 +323,7 @@
           var card = priceInput.closest('.sale-form');
           var price = Number(priceInput.value || 0);
           card.querySelector('.sale-myplot-commission').value = price ? Math.round(price * 0.10) : '';
+          card.querySelector('.sale-buyer-fee').value = price ? Math.round(price * 0.05) : '';
           var inquirySelected = card.querySelector('.sale-inquiry').value;
           card.querySelector('.sale-referral-commission').value = price && inquirySelected ? Math.round(price * 0.01) : '';
         });
@@ -343,6 +346,7 @@
             buyer_inquiry_id: inquiryId,
             sale_price: Number(form.querySelector('.sale-price').value) || null,
             myplot_commission: Number(form.querySelector('.sale-myplot-commission').value) || null,
+            buyer_legal_admin_fee: Number(form.querySelector('.sale-buyer-fee').value) || null,
             referral_commission: Number(form.querySelector('.sale-referral-commission').value) || null,
             referral_paid: form.querySelector('.sale-referral-paid').checked,
           };
