@@ -241,12 +241,6 @@ function closeDetail(){
 
 
 
-    <div class="section-head">
-      <h2>What a listing will look like</h2>
-      <p>Every listing shows its property type and exactly what has been verified, land title checks and building checks are not the same thing, and MyPlot never blurs that line.</p>
-    </div>
-
-    <div class="listings-row" id="listings-container"></div>
   </div>
 </section>
 
@@ -400,11 +394,11 @@ function renderFeaturedEstate() {
   var container = document.getElementById('featured-estate-container');
   if (!container || typeof MYPLOT_LISTINGS === 'undefined') return;
 
-  var featured = null;
+  var realEstates = [];
   for (var i = 0; i < MYPLOT_LISTINGS.length; i++) {
-    if (MYPLOT_LISTINGS[i].founding) { featured = MYPLOT_LISTINGS[i]; break; }
+    if (!MYPLOT_LISTINGS[i].isExample) realEstates.push(MYPLOT_LISTINGS[i]);
   }
-  if (!featured) { container.style.display = 'none'; return; }
+  if (realEstates.length === 0) { container.style.display = 'none'; return; }
 
   var unitIcons = [
     '<svg class="fe-unit-icon" viewBox="0 0 60 60"><rect x="10" y="26" width="40" height="26" rx="2" fill="#2C7A54"/><polygon points="6,26 30,10 54,26" fill="#1F5C3F"/><rect x="26" y="36" width="8" height="16" fill="#fff"/></svg>',
@@ -412,107 +406,48 @@ function renderFeaturedEstate() {
     '<svg class="fe-unit-icon" viewBox="0 0 60 60"><rect x="6" y="24" width="16" height="28" fill="#3F9469"/><rect x="24" y="24" width="16" height="28" fill="#2C7A54"/><rect x="42" y="24" width="12" height="28" fill="#1F5C3F"/></svg>'
   ];
 
-  var unitsHtml = '';
-  for (var j = 0; j < featured.units.length; j++) {
-    var u = featured.units[j];
-    unitsHtml += '<div class="fe-unit">' +
-      (unitIcons[j] || unitIcons[0]) +
-      '<div class="fe-unit-size">' + u.size + '</div>' +
-      '<div class="fe-unit-label">' + u.label + '</div>' +
-      '<div class="fe-price-row">' +
-        (u.wasPrice ? '<span class="fe-promo-tag">Promo Price</span>' : '') +
-        '<span class="fe-price">' + u.price + '</span>' +
-        (u.wasPrice ? '<span class="fe-was-price">' + u.wasPrice + '</span>' : '') +
-      '</div>' +
-    '</div>';
-  }
-
-  container.innerHTML =
-    '<div class="fe-card">' +
-      '<div class="fe-top">' +
-        '<span class="fe-ribbon">&#9733; Founding Estate &middot; Now Selling</span>' +
-        '<div class="fe-verify-anchor">' +
-          '<svg class="fv-icon" viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#3F7259"/><path d="M5.5,10.2 L8.5,13.2 L14.5,6.8" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-          '<span class="fv-text">' + featured.verification + '</span>' +
-        '</div>' +
-        '<div class="fe-name">' + featured.name + '</div>' +
-        '<div class="fe-loc">&#128205; ' + featured.location + '</div>' +
-        '<span class="fe-approved">&#9989; FCDA Approved Estate Plot</span>' +
-        '<div class="fe-note">' + featured.imageNote + '</div>' +
-      '</div>' +
-      '<div class="fe-units">' + unitsHtml + '</div>' +
-      '<div class="fe-cta-row">' +
-        '<div class="fe-desc">' + featured.description + '</div>' +
-        '<a href="#" class="btn btn-primary">Enquire about ' + featured.name + ' &rarr;</a>' +
-      '</div>' +
-    '</div>';
-}
-renderFeaturedEstate();
-
-function renderListings() {
-  var container = document.getElementById('listings-container');
-  if (!container || typeof MYPLOT_LISTINGS === 'undefined') return;
-
-  var html = '';
-  for (var i = 0; i < MYPLOT_LISTINGS.length; i++) {
-    var l = MYPLOT_LISTINGS[i];
-    if (l.founding) continue;
-    var isLand = l.propertyType === 'land';
-    var typeClass = isLand ? 'land' : 'building';
-    var typeLabel = isLand ? 'LAND' : 'BUILDING';
-
-    var badgeClass = 'risk-badge';
-    if (l.verification === 'LAND ONLY') badgeClass = 'verify-scope-badge';
-    else if (l.verification === 'MEDIUM RISK') badgeClass = 'risk-badge risk-medium';
-    else if (l.verification === 'HIGH RISK') badgeClass = 'risk-badge risk-high';
-
-    var cornerBadge = '';
-    if (l.founding) {
-      cornerBadge = '<span class="example-badge founding-badge">FOUNDING ESTATE</span>';
-    } else if (l.isExample) {
-      cornerBadge = '<span class="example-badge">EXAMPLE LISTING</span>';
-    }
-
-    var iconSvg = isLand
-      ? '<svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="40,50 108,38 120,96 36,108" fill="none" stroke="#A8CDB8" stroke-width="6" stroke-linejoin="round"/><circle cx="120" cy="114" r="26" fill="#A8CDB8"/><path d="M108,114 L117,123 L134,102" fill="none" stroke="#112038" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-      : '<svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="34" y="60" width="92" height="70" fill="none" stroke="#A8CDB8" stroke-width="6"/><polygon points="30,60 80,28 130,60" fill="none" stroke="#A8CDB8" stroke-width="6" stroke-linejoin="round"/><rect x="70" y="95" width="20" height="35" fill="none" stroke="#A8CDB8" stroke-width="5"/></svg>';
+  var allCardsHtml = '';
+  for (var e = 0; e < realEstates.length; e++) {
+    var featured = realEstates[e];
 
     var unitsHtml = '';
-    if (l.units.length === 1) {
-      var u = l.units[0];
-      unitsHtml = '<div class="price">' + u.price + (u.wasPrice ? ' <span class="was-price">' + u.wasPrice + '</span>' : '') + '</div>';
-    } else {
-      unitsHtml = '<div class="unit-options">';
-      for (var j = 0; j < l.units.length; j++) {
-        var uu = l.units[j];
-        unitsHtml += '<div class="unit-option">' +
-          '<div class="unit-option-label"><strong>' + uu.size + '</strong> &middot; ' + uu.label + '</div>' +
-          '<div class="unit-option-price">' + uu.price + (uu.wasPrice ? ' <span class="was-price">' + uu.wasPrice + '</span>' : '') + '</div>' +
-        '</div>';
-      }
-      unitsHtml += '</div>';
+    for (var j = 0; j < featured.units.length; j++) {
+      var u = featured.units[j];
+      unitsHtml += '<div class="fe-unit">' +
+        (unitIcons[j % unitIcons.length]) +
+        '<div class="fe-unit-size">' + u.size + '</div>' +
+        '<div class="fe-unit-label">' + u.label + '</div>' +
+        '<div class="fe-price-row">' +
+          (u.wasPrice ? '<span class="fe-promo-tag">Promo Price</span>' : '') +
+          '<span class="fe-price">' + u.price + '</span>' +
+          (u.wasPrice ? '<span class="fe-was-price">' + u.wasPrice + '</span>' : '') +
+        '</div>' +
+      '</div>';
     }
 
-    html += '<div class="sample-listing">' +
-      '<div class="thumb">' +
-        cornerBadge +
-        '<span class="type-badge ' + typeClass + '">' + typeLabel + '</span>' +
-        iconSvg +
-      '</div>' +
-      '<div class="body">' +
-        '<div class="top-row">' +
-          '<div><h4>' + l.name + '</h4><div class="loc">' + l.location.toUpperCase() + '</div></div>' +
-          '<span class="' + badgeClass + '">' + l.verification + '</span>' +
+    allCardsHtml +=
+      '<div class="fe-card">' +
+        '<div class="fe-top">' +
+          '<span class="fe-ribbon">&#9733; Founding Estate &middot; Now Selling</span>' +
+          '<div class="fe-verify-anchor">' +
+            '<svg class="fv-icon" viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#3F7259"/><path d="M5.5,10.2 L8.5,13.2 L14.5,6.8" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+            '<span class="fv-text">' + featured.verification + '</span>' +
+          '</div>' +
+          '<div class="fe-name">' + featured.name + '</div>' +
+          '<div class="fe-loc">&#128205; ' + featured.location + '</div>' +
+          '<span class="fe-approved">&#9989; FCDA Approved Estate Plot</span>' +
+          '<div class="fe-note">' + featured.imageNote + '</div>' +
         '</div>' +
-        unitsHtml +
-        (l.imageNote ? '<div class="image-note">' + l.imageNote + '</div>' : '') +
-        '<div class="scope-note">' + l.description + '</div>' +
-      '</div>' +
-    '</div>';
+        '<div class="fe-units">' + unitsHtml + '</div>' +
+        '<div class="fe-cta-row">' +
+          '<div class="fe-desc">' + featured.description + '</div>' +
+          '<a href="tel:+2348065931712" class="btn btn-primary">Enquire about ' + featured.name + ' &rarr;</a>' +
+        '</div>' +
+      '</div>';
   }
-  container.innerHTML = html;
+  container.innerHTML = allCardsHtml;
 }
-renderListings();
+renderFeaturedEstate();
 </script>
 <script src="../js/main.js"></script>
 <script>

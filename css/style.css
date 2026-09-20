@@ -253,7 +253,8 @@ header.site{
   font-family:var(--display); font-weight:700; font-size:clamp(25px,2.9vw,31px);
   color:var(--ink); letter-spacing:-0.015em; margin-top:12px; line-height:1.25;
 }
-.trust-row{display:grid; grid-template-columns:repeat(3, 1fr); gap:34px;}
+.trust-row{display:flex; flex-wrap:wrap; gap:34px;}
+.trust-row .trust-item{flex:1; min-width:260px;}
 .trust-item h4{font-family:var(--body); font-weight:700; font-size:17px; color:var(--ink); margin-bottom:9px;}
 .trust-item p{font-size:15.5px; color:var(--ink-faint); line-height:1.6;}
 
@@ -430,7 +431,7 @@ section{padding:0;}
 /* ---------- FEATURED ESTATE (bold, marketing-forward) ---------- */
 .featured-estate{ margin-bottom:44px; }
 .fe-card{
-  border-radius:16px; overflow:hidden;
+  border-radius:16px; overflow:hidden; margin-bottom:32px;
   background:linear-gradient(135deg, #16412E 0%, #1F5C3F 55%, #2C7A54 100%);
   box-shadow:0 14px 40px rgba(22,65,46,0.28);
 }
@@ -456,7 +457,7 @@ section{padding:0;}
 
 .fe-units{ background:#fff; padding:28px 36px 34px; display:flex; flex-wrap:wrap; }
 .fe-unit{
-  flex:1; min-width:220px; border:1.5px solid #E3E1D9; border-radius:12px; padding:20px; position:relative; overflow:hidden;
+  flex: 0 0 calc(33.333% - 18px); min-width:220px; border:1.5px solid #E3E1D9; border-radius:12px; padding:20px; position:relative; overflow:hidden;
   margin-right:18px; margin-bottom:18px;
 }
 .fe-unit-icon{ width:52px; height:52px; margin-bottom:12px; }
@@ -506,7 +507,7 @@ footer{background:var(--navy); color:#A7B3BF; padding:44px 0;}
     margin-top:6px; padding-top:12px;
   }
   .product-row{grid-template-columns:1fr;}
-  .trust-row{grid-template-columns:1fr; gap:26px;}
+  .trust-row{flex-direction:column; gap:26px;}
   .info-grid{flex-direction:column;}
   .form-row-2{flex-direction:column;}
   .form-row-3{flex-direction:column;}
