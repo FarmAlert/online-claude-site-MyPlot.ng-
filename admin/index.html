@@ -42,14 +42,25 @@
   .rec-field b{ color:var(--ink-faint); font-weight:600; }
   .status-select{ font-family:var(--mono); font-size:11.5px; font-weight:700; padding:6px 10px; border-radius:6px; border:1.5px solid var(--line); background:#fff; text-transform:uppercase; }
   .sale-toggle{ font-family:var(--mono); font-size:11.5px; font-weight:700; color:var(--teal-dim); background:none; border:none; cursor:pointer; text-decoration:underline; margin-top:8px; }
-  .sale-form{ display:none; margin-top:14px; padding-top:14px; border-top:1px solid var(--line); }
-  .sale-form.open{ display:block; }
-  .sale-form .field{ margin-bottom:14px; }
-  .sale-form label{ display:block; font-size:12.5px; font-weight:700; color:var(--ink); margin-bottom:5px; }
-  .sale-form input, .sale-form select{ width:100%; padding:9px 11px; border:1.5px solid var(--line); border-radius:5px; font-size:13.5px; }
+  .sale-form, .escrow-form, .new-escrow-form{ display:none; margin-top:14px; padding-top:14px; border-top:1px solid var(--line); }
+  .sale-form.open, .escrow-form.open, .new-escrow-form.open{ display:block; }
+  .sale-form .field, .escrow-form .field, .new-escrow-form .field{ margin-bottom:14px; }
+  .sale-form label, .escrow-form label, .new-escrow-form label{ display:block; font-size:12.5px; font-weight:700; color:var(--ink); margin-bottom:5px; }
+  .sale-form input, .sale-form select, .escrow-form input, .escrow-form select, .new-escrow-form input, .new-escrow-form select{ width:100%; padding:9px 11px; border:1.5px solid var(--line); border-radius:5px; font-size:13.5px; }
   .save-btn{ font-family:var(--mono); font-size:12px; font-weight:700; color:#fff; background:var(--navy); border:none; padding:9px 16px; border-radius:6px; cursor:pointer; }
   .empty-note{ padding:24px; text-align:center; color:var(--ink-faint); font-size:13.5px; }
   .save-note{ font-size:12px; color:var(--teal-dim); margin-left:10px; }
+  .escrow-ref{ font-family:var(--mono); font-weight:700; color:var(--navy); background:#EEF3F0; border-radius:5px; padding:2px 8px; letter-spacing:0.5px; }
+  .escrow-status-tag{ font-family:var(--mono); font-size:10.5px; font-weight:700; text-transform:uppercase; padding:3px 9px; border-radius:20px; letter-spacing:0.3px; }
+  .escrow-status-awaiting_funds{ background:#F3E9C8; color:#7A5B10; }
+  .escrow-status-funds_received{ background:#DCE9F5; color:#1E4E7A; }
+  .escrow-status-held{ background:#E3E8EF; color:#26344A; }
+  .escrow-status-released{ background:#DCEFE3; color:#1E6B44; }
+  .escrow-status-refunded{ background:#EEE; color:#555; }
+  .escrow-status-disputed{ background:#F5DCDC; color:#8A2020; }
+  .escrow-account-box{ background:#F7F8F5; border:1px solid var(--line); border-radius:8px; padding:14px 16px; margin-bottom:20px; font-size:13px; }
+  .escrow-account-box b{ color:var(--ink); }
+  .new-escrow-toggle{ font-family:var(--mono); font-size:12.5px; font-weight:700; color:#fff; background:var(--navy); border:none; padding:10px 16px; border-radius:6px; cursor:pointer; margin-bottom:4px; }
 </style>
 </head>
 <body>
@@ -106,6 +117,7 @@
     <button class="tab-btn" data-tab="buy">Buy Inquiries <span class="tab-badge" id="badge-buy"></span></button>
     <button class="tab-btn" data-tab="fraud">Fraud Reports <span class="tab-badge" id="badge-fraud"></span></button>
     <button class="tab-btn" data-tab="referrers">Referrers <span class="tab-badge" id="badge-referrers"></span></button>
+    <button class="tab-btn" data-tab="escrow">Escrow <span class="tab-badge" id="badge-escrow"></span></button>
   </div>
 
   <div class="tab-panel active" id="panel-sell"><div class="empty-note">Loading...</div></div>
@@ -113,6 +125,7 @@
   <div class="tab-panel" id="panel-buy"><div class="empty-note">Loading...</div></div>
   <div class="tab-panel" id="panel-fraud"><div class="empty-note">Loading...</div></div>
   <div class="tab-panel" id="panel-referrers"><div class="empty-note">Loading...</div></div>
+  <div class="tab-panel" id="panel-escrow"><div class="empty-note">Loading...</div></div>
 </div>
 
 <footer>
@@ -247,6 +260,7 @@
     loadBuy();
     loadFraud();
     loadReferrers();
+    loadEscrow();
   }
 
   // ---- Sell Submissions (the one that records completed sales) ----
@@ -443,6 +457,153 @@
       return '<div class="rec-field"><b>Code:</b> ' + r.referral_code + ' &nbsp; <b>Phone:</b> ' + r.phone + ' &nbsp; <b>Email:</b> ' + r.email + '</div>' +
         (r.bank_account_name ? '<div class="rec-field"><b>Bank:</b> ' + r.bank_name + ' \u2014 ' + r.bank_account_name + ', ' + r.bank_account_number + '</div>' : '') +
         '<div class="rec-field"><b>Total earned:</b> ' + formatNaira(r.total_earned) + '</div>';
+    });
+  }
+
+  // ---- Escrow tracking ----
+  // Manual staff tracking layer, not a payment gateway. MyPlot's bank
+  // account below is where buyers wire the purchase sum; staff confirm on
+  // the bank statement and update status here. See supabase_schema/
+  // myplot_schema.sql for the escrow_transactions table this reads/writes.
+  var ESCROW_ACCOUNT = { name: 'MyPlot.NG', number: '9652683212', bank: 'Providus Bank' };
+  var sellSubmissionsCache = [];
+
+  var ESCROW_STATUSES = ['awaiting_funds', 'funds_received', 'held', 'released', 'refunded', 'disputed'];
+  var ESCROW_STATUS_LABELS = {
+    awaiting_funds: 'Awaiting funds', funds_received: 'Funds received', held: 'Held',
+    released: 'Released', refunded: 'Refunded', disputed: 'Disputed'
+  };
+
+  function loadEscrow() {
+    Promise.all([
+      window.MyPlotAuth.authedFetch("/rest/v1/escrow_transactions?select=*&order=created_at.desc", { method: "GET" }),
+      window.MyPlotAuth.authedFetch("/rest/v1/sell_submissions?select=id,name,listing_location&order=created_at.desc", { method: "GET" }),
+    ]).then(function (results) {
+      var rows = results[0] || [];
+      sellSubmissionsCache = results[1] || [];
+      var panel = document.getElementById("panel-escrow");
+
+      setBadge("badge-escrow", rows.filter(function (r) { return r.status === "awaiting_funds" || r.status === "funds_received"; }).length);
+
+      var listingOptions = '<option value="">\u2014 not linked to a listing \u2014</option>' + sellSubmissionsCache.map(function (s) {
+        return '<option value="' + s.id + '">' + s.name + ' \u2014 ' + (s.listing_location || '') + '</option>';
+      }).join('');
+
+      var html =
+        '<div class="escrow-account-box">' +
+          '<b>MyPlot\u2019s receiving account</b> \u2014 give this to a buyer once a sale is agreed, along with the reference code generated when you start their escrow entry below.<br>' +
+          'Account name: <b>' + ESCROW_ACCOUNT.name + '</b> &nbsp; Account number: <b>' + ESCROW_ACCOUNT.number + '</b> &nbsp; Bank: <b>' + ESCROW_ACCOUNT.bank + '</b>' +
+        '</div>' +
+        '<button class="new-escrow-toggle" id="new-escrow-toggle">+ Start new escrow transaction</button>' +
+        '<div class="new-escrow-form" id="new-escrow-form">' +
+          '<div class="field"><label>Buyer name</label><input type="text" id="ne-buyer-name"></div>' +
+          '<div class="field"><label>Buyer phone</label><input type="text" id="ne-buyer-phone"></div>' +
+          '<div class="field"><label>Linked listing (seller)</label><select id="ne-listing">' + listingOptions + '</select></div>' +
+          '<div class="field"><label>Amount expected (\u20a6, full purchase sum)</label><input type="number" id="ne-amount"></div>' +
+          '<button class="save-btn" id="ne-create">Create & generate reference code</button>' +
+          '<span class="save-note" id="ne-note"></span>' +
+        '</div>';
+
+      if (rows.length === 0) {
+        panel.innerHTML = html + '<div class="empty-note">No escrow transactions yet.</div>';
+      } else {
+        html += rows.map(function (r) {
+          var listing = sellSubmissionsCache.filter(function (s) { return s.id === r.sell_submission_id; })[0];
+          return (
+            '<div class="rec-card" data-id="' + r.id + '">' +
+            '<div class="rec-top">' +
+              '<div><div class="rec-name"><span class="escrow-ref">' + r.reference_code + '</span></div>' +
+              '<div class="rec-meta">' + formatDate(r.created_at) + (listing ? ' \u00b7 ' + listing.name + ' \u2014 ' + (listing.listing_location || '') : '') + '</div></div>' +
+              '<span class="escrow-status-tag escrow-status-' + r.status + '">' + ESCROW_STATUS_LABELS[r.status] + '</span>' +
+            '</div>' +
+            '<div class="rec-field"><b>Buyer:</b> ' + r.buyer_name + ' &nbsp; <b>Phone:</b> ' + r.buyer_phone + '</div>' +
+            '<div class="rec-field"><b>Expected:</b> ' + formatNaira(r.amount_expected) +
+              (r.amount_received ? ' &nbsp; <b>Received:</b> ' + formatNaira(r.amount_received) + (r.date_received ? ' on ' + formatDate(r.date_received) : '') : '') + '</div>' +
+            (r.status === 'released' ? '<div class="rec-field"><b>Released to seller:</b> ' + formatNaira(r.release_amount_seller) + (r.release_date ? ' on ' + formatDate(r.release_date) : '') + (r.released_by ? ' by ' + r.released_by : '') + '</div>' : '') +
+            (r.notes ? '<div class="rec-field"><b>Notes:</b> ' + r.notes + '</div>' : '') +
+            '<button class="sale-toggle escrow-toggle" data-id="' + r.id + '">Update escrow status</button>' +
+            '<div class="escrow-form" id="escrow-form-' + r.id + '">' +
+              '<div class="field"><label>Status</label><select class="esc-status">' +
+                ESCROW_STATUSES.map(function (s) { return '<option value="' + s + '"' + (r.status === s ? ' selected' : '') + '>' + ESCROW_STATUS_LABELS[s] + '</option>'; }).join('') +
+              '</select></div>' +
+              '<div class="field"><label>Amount received (\u20a6, confirmed on bank statement)</label><input type="number" class="esc-received" value="' + (r.amount_received || '') + '"></div>' +
+              '<div class="field"><label>Date received</label><input type="date" class="esc-date-received" value="' + (r.date_received || '') + '"></div>' +
+              '<div class="field"><label>Amount to release to seller (\u20a6, after MyPlot\u2019s fees)</label><input type="number" class="esc-release-amount" value="' + (r.release_amount_seller || '') + '"></div>' +
+              '<div class="field"><label>Release date</label><input type="date" class="esc-release-date" value="' + (r.release_date || '') + '"></div>' +
+              '<div class="field"><label>Released by (staff name)</label><input type="text" class="esc-released-by" value="' + (r.released_by || '') + '"></div>' +
+              '<div class="field"><label>Notes</label><input type="text" class="esc-notes" value="' + (r.notes || '') + '"></div>' +
+              '<button class="save-btn save-escrow" data-id="' + r.id + '">Save</button>' +
+              '<span class="save-note"></span>' +
+            '</div>' +
+            '</div>'
+          );
+        }).join('');
+        panel.innerHTML = html;
+      }
+
+      document.getElementById('new-escrow-toggle').addEventListener('click', function () {
+        document.getElementById('new-escrow-form').classList.toggle('open');
+      });
+
+      document.getElementById('ne-create').addEventListener('click', function () {
+        var note = document.getElementById('ne-note');
+        var buyerName = document.getElementById('ne-buyer-name').value.trim();
+        var buyerPhone = document.getElementById('ne-buyer-phone').value.trim();
+        var amount = Number(document.getElementById('ne-amount').value) || 0;
+        if (!buyerName || !buyerPhone || !amount) {
+          note.textContent = 'Buyer name, phone and amount are required';
+          return;
+        }
+        window.MyPlotAuth.authedFetch('/rest/v1/escrow_transactions', {
+          method: 'POST',
+          headers: { Prefer: 'return=representation' },
+          body: JSON.stringify({
+            buyer_name: buyerName,
+            buyer_phone: buyerPhone,
+            sell_submission_id: document.getElementById('ne-listing').value || null,
+            amount_expected: amount,
+          }),
+        }).then(function (created) {
+          var ref = created && created[0] ? created[0].reference_code : '';
+          note.textContent = ref ? ('Created \u2014 reference ' + ref) : 'Created';
+          loadEscrow();
+        }).catch(function () {
+          note.textContent = 'Failed to create';
+        });
+      });
+
+      panel.querySelectorAll('.escrow-toggle').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          document.getElementById('escrow-form-' + btn.getAttribute('data-id')).classList.toggle('open');
+        });
+      });
+
+      panel.querySelectorAll('.save-escrow').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var id = btn.getAttribute('data-id');
+          var form = document.getElementById('escrow-form-' + id);
+          var note = form.querySelector('.save-note');
+          var payload = {
+            status: form.querySelector('.esc-status').value,
+            amount_received: Number(form.querySelector('.esc-received').value) || null,
+            date_received: form.querySelector('.esc-date-received').value || null,
+            release_amount_seller: Number(form.querySelector('.esc-release-amount').value) || null,
+            release_date: form.querySelector('.esc-release-date').value || null,
+            released_by: form.querySelector('.esc-released-by').value || null,
+            notes: form.querySelector('.esc-notes').value || null,
+          };
+          window.MyPlotAuth.authedFetch('/rest/v1/escrow_transactions?id=eq.' + id, {
+            method: 'PATCH',
+            headers: { Prefer: 'return=minimal' },
+            body: JSON.stringify(payload),
+          }).then(function () {
+            note.textContent = 'Saved';
+            loadEscrow();
+          }).catch(function () {
+            note.textContent = 'Failed to save';
+          });
+        });
+      });
     });
   }
 })();

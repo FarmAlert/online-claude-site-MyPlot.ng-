@@ -85,6 +85,27 @@ your own API, etc.), the same pattern works, just point each `<form
 action="">` at your endpoint. `js/main.js` only assumes the endpoint
 returns a normal HTTP success/failure status.
 
+## 3b. Escrow tracking (manual, not a payment gateway)
+
+`admin/index.html` has an **Escrow** tab backed by the `escrow_transactions`
+table in `supabase_schema/myplot_schema.sql`. It is a manual staff tracking
+layer only — no automated banking/payment integration exists yet:
+
+- Staff start a transaction on the admin page (buyer name/phone, linked
+  listing, amount expected) and the database auto-generates a reference
+  code (`ESC-XXXXXX`).
+- The buyer is given MyPlot's receiving account and that reference code, and
+  wires the purchase sum there directly:
+  **MyPlot.NG · 9652683212 · Providus Bank**
+- Staff check the bank statement/app themselves, then mark the transaction
+  `funds_received` → `held` → `released` (or `refunded` / `disputed`) on the
+  admin page, filling in amount received, release amount to the seller
+  (after MyPlot's fees), and who authorised the release.
+- When a real payment gateway or licensed settlement partner is wired in
+  later, this table is the natural place to attach it — the status flow
+  stays the same, only how `funds_received` gets set (automatically instead
+  of by hand) would change.
+
 ## 4. Things that are still placeholders
 
 - **Formspree endpoints** — see above, required before forms will actually
