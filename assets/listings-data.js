@@ -39,6 +39,13 @@
                       Use "LAND ONLY" only when propertyType is "building"
                       and the structure itself has NOT been independently
                       verified, only the underlying land title has.
+  - verificationText: (optional) the wording shown on the badge instead of
+                      "verification", e.g. "TITLE VERIFIED" for a building
+                      whose land title is verified.
+  - ribbon:        (optional) text of the gold ribbon on the card. Defaults to
+                      "Founding Estate · Now Selling".
+  - approvedNote:  (optional) the line under the location. Defaults to
+                      "FCDA Approved Estate Plot".
   - imageNote:     short caption under the thumbnail, use this to say
                       "Illustrative renders" whenever the images shown
                       are architect mockups and not photos of something
@@ -121,6 +128,23 @@ const MYPLOT_LISTINGS = [
       { size: "500 sqm", label: "Sized for a 5 Bedroom Fully Detached Duplex", price: "₦18,500,000", wasPrice: "₦24,800,000" },
       { size: "300 sqm", label: "Sized for a 4 Bedroom Semi Detached Duplex", price: "₦11,700,000", wasPrice: "₦14,900,000" },
       { size: "200 sqm", label: "Sized for a 4 Bedroom Terrace Duplex", price: "₦7,800,000", wasPrice: "₦10,000,000" }
+    ]
+  },
+
+  {
+    id: "the-nexus-residence-apo-01",
+    name: "The Nexus Residence",
+    location: "CBN Estate, Apo, Abuja",
+    district: "lugbe",
+    propertyType: "building",
+    verification: "LAND ONLY",
+    verificationText: "TITLE VERIFIED",
+    ribbon: "Limited Offer · Now Selling Off-Plan",
+    approvedNote: "FCDA C of O · Title verified by MyPlot",
+    imageNote: "Artist's impressions. The home is under construction and delivered fully finished.",
+    description: "A smart 5-bedroom terrace over three floors with two master suites, three walk-in closets and a boys' quarters with its own WC. Whole-home automation is wired in during the build and included in the price. Part of a 37-home estate with an on-site school, landscaped streets and dedicated parking. Price and availability subject to change without notice.",
+    units: [
+      { size: "5 Bedroom Terrace", label: "Smart system included · delivered finished", price: "₦325,000,000", wasPrice: "" }
     ]
   }
 
