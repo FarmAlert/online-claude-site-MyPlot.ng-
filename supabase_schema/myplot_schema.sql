@@ -29,10 +29,10 @@
 --    sign-in if it is not already on. This is required before referrer
 --    signup can work at all.
 -- 2. Open your Supabase project → SQL Editor → New query.
--- 3. Paste this whole file and run it once. It creates all tables in the
---    correct dependency order, sets up the referral code trigger, turns
+-- 3. Paste this whole file and run it once. It creates all five tables in
+--    the correct dependency order, sets up the referral code trigger, turns
 --    on Row Level Security, and sets both the public submission policies
---    and the authenticated referrer dashboard policies.
+--    and the authenticated referrer-dashboard policies.
 -- 4. The site's forms, referrer signup, login, and dashboard pages are
 --    already built and already call Supabase directly (raw REST calls to
 --    /rest/v1/... and /auth/v1/..., using the public "anon" key, no SDK
@@ -58,17 +58,20 @@
 create table check_requests (
   id              uuid primary key default gen_random_uuid(),
   created_at      timestamptz not null default now(),
-  status          text not null default 'new',   -- new / in_review / completed / cancelled
+  status          text not null default 'new',        -- new / in_review / completed / cancelled
 
   name            text not null,
   phone           text not null,
   email           text not null,
-  plot_location   text not null,                 -- e.g. "Gwarinpa, Abuja"
-  plot_count      text,                          -- free text, e.g. "1" or "8 for a multi plot estate"
-  plot_reference  text,                          -- survey plan / plot number, if known
+
+  plot_location   text not null,                       -- e.g. "Gwarinpa, Abuja"
+  plot_count      text,                                 -- free text, e.g. "1" or "8 for a multi plot estate"
+  plot_reference  text,                                 -- survey plan / plot number, if known
+
   addon_insight   boolean not null default false,
   addon_foresight boolean not null default false,
-  details         text,                          -- seller name, documents already held, etc.
+
+  details         text,                                 -- seller name, documents already held, etc.
 
   constraint check_requests_status_valid
     check (status in ('new', 'in_review', 'completed', 'cancelled'))
@@ -82,22 +85,24 @@ comment on table check_requests is 'CheckMyPlot report requests submitted from c
 -- Created before buy_inquiries, which references referral_code below.
 
 create table referrers (
-  id                  uuid primary key default gen_random_uuid(),
-  created_at          timestamptz not null default now(),
-  status              text not null default 'pending',   -- pending / active / suspended
+  id              uuid primary key default gen_random_uuid(),
+  created_at      timestamptz not null default now(),
+  status          text not null default 'pending',       -- pending / active / suspended
 
-  user_id             uuid not null unique references auth.users(id),  -- the referrer's login account
-  name                text not null,
-  phone               text not null,
-  email               text not null,
-  referral_code       text not null unique,   -- auto-generated on insert, see trigger below,
-                                              -- the client never supplies this value
+  user_id         uuid not null unique references auth.users(id),  -- the referrer's login account
 
-  bank_account_name   text,                   -- name on the bank account
-  bank_account_number text,                   -- account number
-  bank_name           text,                   -- e.g. "GTBank", "Access Bank"
+  name            text not null,
+  phone           text not null,
+  email           text not null,
 
-  total_earned        numeric(14,2) not null default 0,  -- running total of paid-out referral commission
+  referral_code   text not null unique,                    -- auto-generated on insert, see trigger below, the
+                                                             -- client never supplies this value
+
+  bank_account_name   text,                               -- name on the bank account
+  bank_account_number text,                                -- account number
+  bank_name            text,                                -- e.g. "GTBank", "Access Bank"
+
+  total_earned    numeric(14,2) not null default 0,         -- running total of paid-out referral commission
 
   constraint referrers_status_valid
     check (status in ('pending', 'active', 'suspended'))
@@ -156,14 +161,16 @@ for each row execute function set_referral_code();
 create table buy_inquiries (
   id                 uuid primary key default gen_random_uuid(),
   created_at         timestamptz not null default now(),
-  status             text not null default 'new',   -- new / contacted / closed
+  status             text not null default 'new',        -- new / contacted / closed
 
   name               text not null,
   phone              text not null,
   email              text not null,
-  preferred_location text,                          -- e.g. "Guzape, Life Camp, Jahi"
-  budget_range       text,                          -- free text, e.g. "N20,000,000 to N40,000,000"
-  details            text,                          -- plot size, purpose, timeline, etc.
+
+  preferred_location text,                                -- e.g. "Guzape, Life Camp, Jahi"
+  budget_range       text,                                 -- free text, e.g. "N20,000,000 to N40,000,000"
+
+  details            text,                                 -- plot size, purpose, timeline, etc.
 
   -- ---- Referral tracking ----
   referral_code      text references referrers(referral_code),  -- code the BUYER entered, if any
@@ -179,20 +186,24 @@ comment on table buy_inquiries is 'BuyMyPlot inquiries, routed internally to the
 -- Source: sell/index.html, "Submit a listing" form
 
 create table sell_submissions (
-  id                    uuid primary key default gen_random_uuid(),
-  created_at            timestamptz not null default now(),
-  status                text not null default 'new',   -- new / awaiting_check / listed / sold / rejected
+  id                  uuid primary key default gen_random_uuid(),
+  created_at          timestamptz not null default now(),
+  status              text not null default 'new',      -- new / awaiting_check / listed / sold / rejected
 
-  name                  text not null,
-  phone                 text not null,
-  email                 text not null,
-  property_type         text not null,                 -- 'land' | 'building'
-  listing_type          text not null,                 -- 'plot' | 'estate'
-  estate_plot_count     text,                          -- only relevant when listing_type = 'estate'
-  listing_location      text not null,                 -- e.g. "Guzape, Abuja"
-  listing_reference     text,
-  seller_type           text not null,                 -- 'individual' | 'agent' | 'developer'
-  details               text,                          -- documents held, asking price, timeline, etc.
+  name                text not null,
+  phone               text not null,
+  email               text not null,
+
+  property_type       text not null,                     -- 'land' | 'building'
+  listing_type        text not null,                     -- 'plot' | 'estate'
+  estate_plot_count   text,                               -- only relevant when listing_type = 'estate'
+
+  listing_location    text not null,                      -- e.g. "Guzape, Abuja"
+  listing_reference   text,
+
+  seller_type         text not null,                      -- 'individual' | 'agent' | 'developer'
+
+  details             text,                               -- documents held, asking price, timeline, etc.
 
   -- ---- Sale & referral tracking ----
   -- Filled in by an admin once a sale actually completes, not by the seller
@@ -200,13 +211,12 @@ create table sell_submissions (
   -- not from this table directly — find which buyer actually purchased,
   -- link their inquiry here, and their referral_code (if any) determines
   -- who gets paid.
-  buyer_inquiry_id      uuid references buy_inquiries(id),  -- which buyer's inquiry led to this sale
-  sale_price            numeric(14,2),   -- filled in once status = 'sold'
-  myplot_commission     numeric(14,2),   -- 10% of sale_price, paid by the seller, filled in on sale
-  buyer_legal_admin_fee numeric(14,2),   -- 5% of sale_price, paid by the buyer separately, filled in on sale
-  referral_commission   numeric(14,2),   -- 1% of sale_price directly, not derived from myplot_commission,
-                                         -- only if the linked buyer_inquiry had a referral_code
-  referral_paid         boolean not null default false,  -- has the referrer actually been paid out
+  buyer_inquiry_id    uuid references buy_inquiries(id),      -- which buyer's inquiry led to this sale
+  sale_price          numeric(14,2),                          -- filled in once status = 'sold'
+  myplot_commission   numeric(14,2),                           -- 10% of sale_price, paid by the seller, filled in on sale
+  buyer_legal_admin_fee numeric(14,2),                          -- 5% of sale_price, paid by the buyer separately, filled in on sale
+  referral_commission numeric(14,2),                           -- 1% of sale_price directly, not derived from myplot_commission, only if the linked buyer_inquiry had a referral_code
+  referral_paid        boolean not null default false,          -- has the referrer actually been paid out
 
   constraint sell_status_valid
     check (status in ('new', 'awaiting_check', 'listed', 'sold', 'rejected')),
@@ -229,13 +239,15 @@ comment on table sell_submissions is 'SellMyPlot listing submissions from sell/i
 create table fraud_reports (
   id            uuid primary key default gen_random_uuid(),
   created_at    timestamptz not null default now(),
-  status        text not null default 'new',   -- new / investigating / resolved / dismissed
+  status        text not null default 'new',             -- new / investigating / resolved / dismissed
 
   name          text not null,
   phone         text not null,
-  plot_location text not null,                 -- district, area, or nearest landmark
-  agent_name    text,                          -- agent being reported, if applicable
-  report_type   text not null,                 -- see check constraint below
+
+  plot_location text not null,                             -- district, area, or nearest landmark
+  agent_name    text,                                       -- agent being reported, if applicable
+
+  report_type   text not null,                              -- see check constraint below
   details       text not null,
 
   constraint fraud_status_valid
@@ -272,7 +284,9 @@ comment on table fraud_reports is 'Community fraud reports. Reporter identity mu
 create table admins (
   id         uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
+
   user_id    uuid not null unique references auth.users(id),
+
   name       text not null,
   email      text not null
 );
@@ -300,29 +314,32 @@ comment on table admins is 'Staff with full view/edit access to every table. Row
 create table escrow_transactions (
   id                    uuid primary key default gen_random_uuid(),
   created_at            timestamptz not null default now(),
-  reference_code        text not null unique,   -- auto-generated, quote this on the bank transfer
 
-  sell_submission_id    uuid references sell_submissions(id),  -- the listing being sold
-  buyer_inquiry_id      uuid references buy_inquiries(id),     -- the buyer paying in
+  reference_code        text not null unique,          -- auto-generated, quote this on the bank transfer
+
+  sell_submission_id    uuid references sell_submissions(id),   -- the listing being sold
+  buyer_inquiry_id      uuid references buy_inquiries(id),      -- the buyer paying in
+
   buyer_name            text not null,
   buyer_phone           text not null,
 
-  amount_expected       numeric(14,2) not null,  -- full purchase sum the buyer is expected to pay in
-  amount_received       numeric(14,2),           -- filled in by staff once confirmed on the bank statement
+  amount_expected       numeric(14,2) not null,         -- full purchase sum the buyer is expected to pay in
+  amount_received       numeric(14,2),                  -- filled in by staff once confirmed on the bank statement
   date_received         date,
 
   status                text not null default 'awaiting_funds',
-    -- awaiting_funds : reference issued to buyer, nothing received yet
-    -- funds_received : staff confirmed the transfer landed, not yet reconciled/held
-    -- held           : reconciled and held pending transaction completion
-    -- released       : paid out to the seller (fees deducted at source), transaction complete
-    -- refunded       : returned to the buyer, sale did not complete
-    -- disputed       : a problem exists, do not release until resolved
+    -- awaiting_funds   : reference issued to buyer, nothing received yet
+    -- funds_received   : staff confirmed the transfer landed, not yet reconciled/held
+    -- held             : reconciled and held pending transaction completion
+    -- released         : paid out to the seller (fees deducted at source), transaction complete
+    -- refunded         : returned to the buyer, sale did not complete
+    -- disputed         : a problem exists, do not release until resolved
 
-  release_amount_seller numeric(14,2),   -- what the seller actually receives, after MyPlot's fees
+  release_amount_seller numeric(14,2),                  -- what the seller actually receives, after MyPlot's fees
   release_date          date,
-  released_by           text,            -- staff member who authorised the release
-  notes                 text,            -- free text: bank reference seen, follow-ups, disputes, etc.
+  released_by           text,                            -- staff member who authorised the release
+
+  notes                 text,                            -- free text: bank reference seen, follow-ups, disputes, etc.
 
   constraint escrow_status_valid
     check (status in ('awaiting_funds', 'funds_received', 'held', 'released', 'refunded', 'disputed'))
@@ -382,14 +399,13 @@ for each row execute function set_escrow_reference();
 -- dashboard, can see everything.
 -- ============================================================================
 
-alter table check_requests      enable row level security;
-alter table referrers           enable row level security;
-alter table buy_inquiries       enable row level security;
-alter table sell_submissions    enable row level security;
-alter table fraud_reports       enable row level security;
-alter table admins              enable row level security;
+alter table check_requests  enable row level security;
+alter table referrers       enable row level security;
+alter table buy_inquiries   enable row level security;
+alter table sell_submissions enable row level security;
+alter table fraud_reports   enable row level security;
+alter table admins          enable row level security;
 alter table escrow_transactions enable row level security;
-
 
 -- ---- Referrer signup & dashboard access (authenticated only) ----
 -- Referrers must create a Supabase Auth account first (email + password),
@@ -430,7 +446,6 @@ create policy "A referrer can view sales linked to their referrals"
 -- that belong to them, that is the point of the dashboard. It does NOT let
 -- them see other sellers' rows, or any row not linked to their own code.
 
-
 -- ---- Public form submissions (anonymous, insert-only) ----
 
 create policy "Public can submit check requests"
@@ -459,7 +474,6 @@ create policy "Public can submit fraud reports"
 -- authenticated referrer viewing their own linked rows as above, or a
 -- properly authenticated admin as below, can.
 
-
 -- ---- Admin access (authenticated + present in the admins table) ----
 -- Full read and update across every table, for admin/index.html. Every
 -- policy below checks the same thing: is this logged-in user's id present
@@ -477,7 +491,6 @@ create policy "A user can check their own admin status"
 create policy "Admins can view all check requests"
   on check_requests for select to authenticated
   using (exists (select 1 from admins where user_id = auth.uid()));
-
 create policy "Admins can update check requests"
   on check_requests for update to authenticated
   using (exists (select 1 from admins where user_id = auth.uid()));
@@ -485,7 +498,6 @@ create policy "Admins can update check requests"
 create policy "Admins can view all sell submissions"
   on sell_submissions for select to authenticated
   using (exists (select 1 from admins where user_id = auth.uid()));
-
 create policy "Admins can update sell submissions"
   on sell_submissions for update to authenticated
   using (exists (select 1 from admins where user_id = auth.uid()));
@@ -493,7 +505,6 @@ create policy "Admins can update sell submissions"
 create policy "Admins can view all buy inquiries"
   on buy_inquiries for select to authenticated
   using (exists (select 1 from admins where user_id = auth.uid()));
-
 create policy "Admins can update buy inquiries"
   on buy_inquiries for update to authenticated
   using (exists (select 1 from admins where user_id = auth.uid()));
@@ -501,7 +512,6 @@ create policy "Admins can update buy inquiries"
 create policy "Admins can view all fraud reports"
   on fraud_reports for select to authenticated
   using (exists (select 1 from admins where user_id = auth.uid()));
-
 create policy "Admins can update fraud reports"
   on fraud_reports for update to authenticated
   using (exists (select 1 from admins where user_id = auth.uid()));
@@ -509,7 +519,6 @@ create policy "Admins can update fraud reports"
 create policy "Admins can view all referrers"
   on referrers for select to authenticated
   using (exists (select 1 from admins where user_id = auth.uid()));
-
 create policy "Admins can update referrers"
   on referrers for update to authenticated
   using (exists (select 1 from admins where user_id = auth.uid()));
@@ -517,11 +526,9 @@ create policy "Admins can update referrers"
 create policy "Admins can view all escrow transactions"
   on escrow_transactions for select to authenticated
   using (exists (select 1 from admins where user_id = auth.uid()));
-
 create policy "Admins can create escrow transactions"
   on escrow_transactions for insert to authenticated
   with check (exists (select 1 from admins where user_id = auth.uid()));
-
 create policy "Admins can update escrow transactions"
   on escrow_transactions for update to authenticated
   using (exists (select 1 from admins where user_id = auth.uid()));
