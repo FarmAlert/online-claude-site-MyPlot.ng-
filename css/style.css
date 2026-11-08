@@ -627,3 +627,26 @@ footer{background:var(--navy); color:#A7B3BF; padding:44px 0;}
   .cta-ghost{ border:1.5px solid rgba(255,255,255,0.35); color:#fff; }
 
   .empty-state{ text-align:center; padding:50px 20px; color:#7A8590; font-size:15px; }
+
+/* Legal partner: Law Corridor */
+.legal-partner{background:var(--navy); color:#fff; padding:72px 0; border-top:1px solid var(--line-navy);}
+.legal-partner .lp-grid{display:flex; flex-wrap:wrap; gap:48px; align-items:center;}
+.legal-partner .lp-copy{flex:1.4; min-width:300px;}
+.legal-partner .eyebrow{color:var(--teal);}
+.legal-partner h2{font-family:var(--display); font-size:36px; line-height:1.12; color:#fff; margin:10px 0 16px;}
+.legal-partner p{font-size:16.5px; line-height:1.65; color:#D3DAE2; max-width:560px; margin-bottom:12px;}
+.legal-partner .lp-links{margin-top:20px; display:flex; gap:14px; flex-wrap:wrap;}
+.lp-badge{flex:1; min-width:280px; border:1.5px solid rgba(168,205,184,0.45); border-radius:20px; padding:34px 30px; background:rgba(255,255,255,0.04);}
+.lp-badge .lp-label{font-family:var(--mono); font-size:12.5px; letter-spacing:0.18em; color:var(--teal);}
+.lp-badge .lp-name{font-family:var(--display); font-weight:700; font-size:34px; letter-spacing:0.04em; color:#fff; margin:10px 0 6px; text-transform:uppercase;}
+.lp-badge .lp-sub{font-size:15px; color:#B9C4CF;}
+.lp-badge ul{list-style:none; margin-top:20px; border-top:1px solid var(--line-navy);}
+.lp-badge li{padding:11px 0; border-bottom:1px solid var(--line-navy); font-size:15.5px; color:#E3E8EE;}
+.lp-badge li:before{content:"\2713"; color:var(--teal); margin-right:11px; font-weight:700;}
+.lp-strip{background:var(--paper-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:18px 0; font-size:15.5px; color:var(--ink-soft);}
+.lp-strip .wrap{display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center;}
+.lp-strip b{font-family:var(--display); color:var(--navy); letter-spacing:0.03em; text-transform:uppercase;}
+.lp-strip .tag{font-family:var(--mono); font-size:12px; letter-spacing:0.16em; color:var(--teal-dim);}
+.lp-strip a{color:var(--teal-dim); font-weight:600; text-decoration:underline;}
+.footer-partner{margin-top:18px; font-size:14px; color:#B9C4CF;}
+.footer-partner b{color:#fff; letter-spacing:0.04em;}
